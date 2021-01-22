@@ -6,7 +6,9 @@ const getMergeSortAnimations = (arr) => {
   //the second one has the indices of the elements just compared
   //the bars at these 2 indices should revert back to the normal color
   //the third one has the height change at an index for a combined hill
-  if (arr.length <= 1) return arr;
+  if (arr.length <= 1) {
+    return animations;
+  }
   const aux = arr.slice();
   mergeSortHelp(arr, 0, arr.length - 1, aux, animations);
   return animations;

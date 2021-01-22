@@ -1,15 +1,11 @@
 import React, { useState } from "react";
 import "./ToolBar.css";
 
-const ToolBar = ({ getArray, mergeSort }) => {
+const ToolBar = ({ getArray, mergeSort, quickSort }) => {
   const [isRunning, setIsRunning] = useState(false);
-  const sortAlgorithms = [mergeSort];
-  const runSortAlgorithm = (sort) => {
-    if (!isRunning) {
-      setIsRunning(true);
-      sort();
-      setIsRunning(true);
-    }
+  const sortAlgorithms = [mergeSort, quickSort];
+  const toggleRunning = () => {
+    setIsRunning(!isRunning);
   };
   return (
     <nav id="tool-bar">
@@ -17,17 +13,14 @@ const ToolBar = ({ getArray, mergeSort }) => {
         New Array
       </div>
       {sortAlgorithms.map((algorithm, idx) => (
-        <SortButton
-          sort={algorithm}
-          isSorting={isRunning}
-          key={`sort-algorithm-${idx}`}
-        ></SortButton>
+        <SortButton sort={algorithm} key={`sort-algorithm-${idx}`}></SortButton>
       ))}
+      <div>{isRunning ? "True" : "False"}</div>
     </nav>
   );
 };
 
-const SortButton = ({ sort, isSorting }) => {
+const SortButton = ({ sort }) => {
   return (
     <div className="sort-button" onClick={sort}>
       {sort.name}

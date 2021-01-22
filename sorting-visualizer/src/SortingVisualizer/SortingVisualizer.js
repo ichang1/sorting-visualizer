@@ -2,12 +2,13 @@ import React, { useState } from "react";
 import "./SortingVisualizer.css";
 import ToolBar from "./../ToolBar/ToolBar.js";
 import getMergeSortAnimations from "./../Sorting/mergeSort.js";
+import getQuickSortAnimations from "./../Sorting/quickSort.js";
 
 const SortingVisualizer = () => {
   const MIN_HEIGHT = 5;
   const MAX_HEIGHT = 510;
 
-  const ANIMATION_BASE_SPEED = 5;
+  const ANIMATION_BASE_SPEED = 3;
 
   const FIRST_COLOR = "aqua";
   const SECOND_COLOR = "red";
@@ -64,9 +65,17 @@ const SortingVisualizer = () => {
     }
   };
 
+  const quickSort = () => {
+    const animations = getQuickSortAnimations(array);
+  };
+
   return (
     <div>
-      <ToolBar getArray={resetArray} mergeSort={mergeSort}></ToolBar>
+      <ToolBar
+        getArray={resetArray}
+        mergeSort={mergeSort}
+        quickSort={quickSort}
+      ></ToolBar>
       <div className="array-container">
         {array.map((val, idx) => (
           <div
