@@ -54,22 +54,45 @@ const quickSortHelp = (arr, left, right, animations) => {
 //   return pivIdx;
 // };
 const partition = (arr, left, right, animations) => {
-  const pivotVal = arr[right];
-  animations.push({ type: "pivot", idx: right });
-  //index of left-most element so far that is larger than the pivot
-  let idx = left;
-  for (let i = left; i <= right - 1; i++) {
-    animations.push({ type: "begin-comparison", i: i, idx: idx });
-    animations.push({ type: "end-comparison", i: i, idx: idx });
-    if (arr[i] <= pivotVal) {
-      animations.push({ type: "swap", i: i, idx: idx });
-      [arr[i], arr[idx]] = [arr[idx], arr[i]];
-      idx += 1;
+  const mid = Math.floor((left + right) / 2);
+  let pivIdx = mid;
+  const piv = arr[pivIdx];
+
+  let i = left;
+  let j = right;
+  while (i < pivIdx && j > pivIdx) {
+    if (arr[i] > piv && arr[j] < piv) {
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+      i += 1;
+      j -= 1;
+    } else if (arr[i] <= piv) {
+      i += 1;
+    } else {
+      j -= 1;
     }
   }
-  animations.push({ type: "swap", i: idx, idx: right });
-  [arr[right], arr[idx]] = [arr[idx], arr[right]];
-  return idx;
+  if (j == mid) {
+    let idx = i;
+    for (let k = i; k < mid; k++) {
+      if (arr[k] <= piv) {
+        [arr[k], arr[idx]] = [arr[idx], arr[k]];
+        idx += 1;
+      }
+    }
+    [arr[idx], arr[mid]] = [arr[mid], arr[idx]];
+    pivIdx = idx;
+  } else {
+    let idx = j;
+    for (let k = j; k > mid; k--) {
+      if (arr[k] >= piv) {
+        [arr[k], arr[idx]] = [arr[idx], arr[k]];
+        idx -= 1;
+      }
+    }
+    [arr[idx], arr[mid]] = [arr[mid], arr[idx]];
+    pivIdx = idx;
+  }
+  return pivIdx;
 };
 
 export default getQuickSortAnimations;
