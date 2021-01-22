@@ -24,35 +24,6 @@ const quickSortHelp = (arr, left, right, animations) => {
   quickSortHelp(arr, pivot + 1, right, animations);
 };
 
-// const partition = (arr, left, right, animations) => {
-//   let pivIdx = Math.floor((left + right) / 2);
-//   const pivotVal = arr[pivIdx];
-//   animations.push({ type: "pivot", idx: Math.floor((left + right) / 2) });
-//   //index of left-most element so far that is larger than the pivot
-//   let i = left;
-//   let j = right;
-//   while (i < j) {
-//     if (arr[i] < pivotVal && arr[j] > pivotVal) {
-//       i += 1;
-//       j -= 1;
-//     } else if (arr[i] < pivotVal) {
-//       i += 1;
-//     } else if (arr[j] > pivotVal) {
-//       j -= 1;
-//     } else {
-//       //not both are equal to pivotVal
-//       // at least one is on the wrong side
-//       // the other might be on the wrong side as well or is pivotVal
-//       if (i == pivIdx) {
-//         pivIdx = j;
-//       } else if (j == pivIdx) {
-//         pivIdx = i;
-//       }
-//       [arr[i], arr[j]] = [arr[j], arr[i]];
-//     }
-//   }
-//   return pivIdx;
-// };
 const partition = (arr, left, right, animations) => {
   const mid = Math.floor((left + right) / 2);
   let pivIdx = mid;
