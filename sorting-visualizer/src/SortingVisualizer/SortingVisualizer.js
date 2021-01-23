@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import "./SortingVisualizer.css";
 import ToolBar from "./../ToolBar/ToolBar.js";
 import getMergeSortAnimations from "./../Sorting/mergeSort.js";
@@ -10,23 +10,29 @@ const SortingVisualizer = () => {
 
   const ANIMATION_BASE_SPEED = 3;
 
-  const FIRST_COLOR = "aqua";
-  const SECOND_COLOR = "red";
+  const AQUA = "aqua";
+  const RED = "red";
+  const MAROON = "#800000";
+
+  const SIZE = 270;
 
   const [array, setArray] = useState([]);
-  const [size, setSize] = useState(270);
+  const [size, setSize] = useState(SIZE);
+
+  const barRefs = useRef([]);
 
   React.useEffect(() => {
     resetArray();
+    barRefs.current = new Array(size);
   }, []);
 
-  const setSizeDefault = (n) => {
-    if (n > 0) {
-      setSize(n);
-    } else {
-      setSize(0);
-    }
-  };
+  // const setSizeDefault = (n) => {
+  //   if (n > 0) {
+  //     setSize(n);
+  //   } else {
+  //     setSize(0);
+  //   }
+  // };
 
   const getRandomIntFromRange = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1) + min);
@@ -42,15 +48,16 @@ const SortingVisualizer = () => {
 
   const mergeSort = () => {
     const animations = getMergeSortAnimations(array);
+    // const arrayBars = document.getElementsByClassName("array-bar");
+    const arrayBars = barRefs.current;
     for (let i = 0; i < animations.length; i++) {
-      const arrayBars = document.getElementsByClassName("array-bar");
       const isColorChange = i % 3 !== 2;
       if (isColorChange) {
         //we are comparing or just  done comparing
         const [leftBarIdx, rightBarIdx] = animations[i];
         const leftBarStyle = arrayBars[leftBarIdx].style;
         const rightBarStyle = arrayBars[rightBarIdx].style;
-        const color = i % 3 === 0 ? SECOND_COLOR : FIRST_COLOR;
+        const color = i % 3 === 0 ? RED : AQUA;
         setTimeout(() => {
           leftBarStyle.backgroundColor = color;
           rightBarStyle.backgroundColor = color;
@@ -67,6 +74,43 @@ const SortingVisualizer = () => {
 
   const quickSort = () => {
     const animations = getQuickSortAnimations(array);
+    const arrayBars = barRefs.current;
+    for (let i = 0; i < animations.length; i++) {
+      const type = animations[i].type;
+      if (type === "pivot") {
+        const action = animations[i].action;
+        const color = action === "start" ? MAROON : AQUA;
+        const pivIdx = animations[i].idx;
+        const pivStyle = arrayBars[pivIdx].style;
+        setTimeout(() => {
+          pivStyle.backgroundColor = color;
+        }, i * ANIMATION_BASE_SPEED);
+      } else if (type === "compare") {
+        const action = animations[i].action;
+        const color = action === "start" ? RED : AQUA;
+        const [barOneIdx, barTwoIdx] = animations[i].bars;
+        console.log(animations[i]);
+        const barOneStyle = arrayBars[barOneIdx].style;
+        const barTwoStyle = arrayBars[barTwoIdx].style;
+        setTimeout(() => {
+          barOneStyle.backgroundColor = color;
+          barTwoStyle.backgroundColor = color;
+        }, i * ANIMATION_BASE_SPEED);
+      } else {
+        //swap
+        const [barOneIdx, barTwoIdx] = animations[i].bars;
+        console.log(animations[i]);
+        const [barOneStyle, barTwoStyle] = [
+          arrayBars[barOneIdx].style,
+          arrayBars[barTwoIdx].style,
+        ];
+        const [barOneNewHeight, barTwoNewHeight] = animations[i].heights;
+        setTimeout(() => {
+          barOneStyle.height = `${barOneNewHeight}px`;
+          barTwoStyle.height = `${barTwoNewHeight}px`;
+        }, i * ANIMATION_BASE_SPEED);
+      }
+    }
   };
 
   return (
@@ -82,6 +126,7 @@ const SortingVisualizer = () => {
             className="array-bar"
             style={{ height: `${val}px` }}
             key={idx}
+            ref={(el) => (barRefs.current[idx] = el)}
           ></div>
         ))}
       </div>
