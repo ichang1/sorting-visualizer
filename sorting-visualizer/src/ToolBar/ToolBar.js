@@ -15,7 +15,6 @@ const ToolBar = ({ getArray, mergeSort, quickSort }) => {
       {sortAlgorithms.map((algorithm, idx) => (
         <SortButton sort={algorithm} key={`sort-algorithm-${idx}`}></SortButton>
       ))}
-      <div>{isRunning ? "True" : "False"}</div>
     </nav>
   );
 };
