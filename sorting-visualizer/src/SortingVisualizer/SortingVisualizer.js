@@ -15,7 +15,7 @@ const SortingVisualizer = () => {
   const RED = "red";
   const MAROON = "#800000";
 
-  const SIZE = 10;
+  const SIZE = 270;
 
   const [array, setArray] = useState([]);
   const [size, setSize] = useState(SIZE);
