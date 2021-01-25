@@ -27,6 +27,7 @@ const heapSort = (arr, animations) => {
   for (let i = arr.length - 1; i > 0; i--) {
     //move cur max to the back
     //cur max is at index 0
+    animations.push({ type: "swap", bars: [0, i], heights: [arr[i], arr[0]] });
     [arr[0], arr[i]] = [arr[i], arr[0]];
     // console.log(arr, i);
     //heapify down on root
@@ -55,21 +56,66 @@ const heapifyDown = (arr, idx, endIdx, animations) => {
       return;
     } else if (leftIdx <= endIdx && rightIdx <= endIdx) {
       const larger = arr[leftIdx] >= arr[rightIdx] ? leftIdx : rightIdx;
+      animations.push({
+        type: "compare",
+        action: "start",
+        bars: [leftIdx, rightIdx],
+      });
+      animations.push({
+        type: "compare",
+        action: "end",
+        bars: [leftIdx, rightIdx],
+      });
       if (arr[larger] > arr[idx]) {
+        animations.push({
+          type: "swap",
+          bars: [idx, larger],
+          heights: [arr[larger], arr[idx]],
+        });
         [arr[idx], arr[larger]] = [arr[larger], arr[idx]];
         idx = larger;
       } else {
         return;
       }
     } else if (leftIdx <= endIdx) {
+      animations.push({
+        type: "compare",
+        action: "start",
+        bars: [leftIdx, leftIdx],
+      });
+      animations.push({
+        type: "compare",
+        action: "end",
+        bars: [leftIdx, leftIdx],
+      });
       if (arr[leftIdx] > arr[idx]) {
+        animations.push({
+          type: "swap",
+          bars: [idx, leftIdx],
+          heights: [arr[leftIdx], arr[idx]],
+        });
         [arr[idx], arr[leftIdx]] = [arr[leftIdx], arr[idx]];
         idx = leftIdx;
       } else {
         return;
       }
     } else {
+      animations.push({
+        type: "compare",
+        action: "start",
+        bars: [rightIdx, rightIdx],
+      });
+      animations.push({
+        type: "compare",
+        action: "end",
+        bars: [rightIdx, rightIdx],
+      });
       if (arr[rightIdx] > arr[idx]) {
+        animations.push({
+          type: "swap",
+          bars: [idx, rightIdx],
+          heights: [arr[rightIdx], arr[idx]],
+        });
         [arr[idx], arr[rightIdx]] = [arr[rightIdx], arr[idx]];
         idx = rightIdx;
       } else {

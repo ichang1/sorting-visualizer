@@ -75,7 +75,6 @@ const SortingVisualizer = () => {
 
   const quickSort = () => {
     const animations = getQuickSortAnimations(array);
-    console.log(array);
     const arrayBars = barRefs.current;
     for (let i = 0; i < animations.length; i++) {
       const type = animations[i].type;
@@ -115,6 +114,33 @@ const SortingVisualizer = () => {
 
   const heapSort = () => {
     const animations = getHeapSortAnimations(array);
+    for (let i = 0; i < animations.length; i++) {
+      const arrayBars = barRefs.current;
+      const type = animations[i].type;
+      if (type === "compare") {
+        const action = animations[i].action;
+        const color = action === "start" ? RED : AQUA;
+        const [barOneIdx, barTwoIdx] = animations[i].bars;
+        const barOneStyle = arrayBars[barOneIdx].style;
+        const barTwoStyle = arrayBars[barTwoIdx].style;
+        setTimeout(() => {
+          barOneStyle.backgroundColor = color;
+          barTwoStyle.backgroundColor = color;
+        }, i * ANIMATION_BASE_SPEED);
+      } else {
+        //swap
+        const [barOneIdx, barTwoIdx] = animations[i].bars;
+        const [barOneStyle, barTwoStyle] = [
+          arrayBars[barOneIdx].style,
+          arrayBars[barTwoIdx].style,
+        ];
+        const [barOneNewHeight, barTwoNewHeight] = animations[i].heights;
+        setTimeout(() => {
+          barOneStyle.height = `${barOneNewHeight}px`;
+          barTwoStyle.height = `${barTwoNewHeight}px`;
+        }, i * ANIMATION_BASE_SPEED);
+      }
+    }
   };
 
   return (
