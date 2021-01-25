@@ -3,6 +3,7 @@ import "./SortingVisualizer.css";
 import ToolBar from "./../ToolBar/ToolBar.js";
 import getMergeSortAnimations from "./../Sorting/mergeSort.js";
 import getQuickSortAnimations from "./../Sorting/quickSort.js";
+import getHeapSortAnimations from "./../Sorting/heapSort.js";
 
 const SortingVisualizer = () => {
   const MIN_HEIGHT = 5;
@@ -14,7 +15,7 @@ const SortingVisualizer = () => {
   const RED = "red";
   const MAROON = "#800000";
 
-  const SIZE = 270;
+  const SIZE = 10;
 
   const [array, setArray] = useState([]);
   const [size, setSize] = useState(SIZE);
@@ -74,6 +75,7 @@ const SortingVisualizer = () => {
 
   const quickSort = () => {
     const animations = getQuickSortAnimations(array);
+    console.log(array);
     const arrayBars = barRefs.current;
     for (let i = 0; i < animations.length; i++) {
       const type = animations[i].type;
@@ -89,7 +91,6 @@ const SortingVisualizer = () => {
         const action = animations[i].action;
         const color = action === "start" ? RED : AQUA;
         const [barOneIdx, barTwoIdx] = animations[i].bars;
-        console.log(animations[i]);
         const barOneStyle = arrayBars[barOneIdx].style;
         const barTwoStyle = arrayBars[barTwoIdx].style;
         setTimeout(() => {
@@ -99,7 +100,6 @@ const SortingVisualizer = () => {
       } else {
         //swap
         const [barOneIdx, barTwoIdx] = animations[i].bars;
-        console.log(animations[i]);
         const [barOneStyle, barTwoStyle] = [
           arrayBars[barOneIdx].style,
           arrayBars[barTwoIdx].style,
@@ -113,12 +113,17 @@ const SortingVisualizer = () => {
     }
   };
 
+  const heapSort = () => {
+    const animations = getHeapSortAnimations(array);
+  };
+
   return (
     <div>
       <ToolBar
         getArray={resetArray}
         mergeSort={mergeSort}
         quickSort={quickSort}
+        heapSort={heapSort}
       ></ToolBar>
       <div className="array-container">
         {array.map((val, idx) => (

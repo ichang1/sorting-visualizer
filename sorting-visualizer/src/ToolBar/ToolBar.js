@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import "./ToolBar.css";
 
-const ToolBar = ({ getArray, mergeSort, quickSort }) => {
+const ToolBar = ({ getArray, mergeSort, quickSort, heapSort }) => {
   const [isRunning, setIsRunning] = useState(false);
-  const sortAlgorithms = [mergeSort, quickSort];
-  const toggleRunning = () => {
-    setIsRunning(!isRunning);
-  };
+  const sortAlgorithms = [mergeSort, quickSort, heapSort];
+  // const toggleRunning = () => {
+  //   setIsRunning(!isRunning);
+  // };
   return (
     <nav id="tool-bar">
       <div id="get-array" onClick={!isRunning ? getArray : null}>
