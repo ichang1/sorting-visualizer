@@ -26,7 +26,7 @@ const SortingVisualizer = () => {
   }, [size]);
 
   const sizeToBarWidth = (n) => {
-    return 52 / n;
+    return 55 / n;
   };
 
   const changeSize = (n) => {
