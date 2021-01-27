@@ -48,18 +48,21 @@ const ToolBar = ({
           {algorithm.name}
         </button>
       ))}
-      <input
-        id="changeSize"
-        type="range"
-        min="20"
-        max="250"
-        step="10"
-        defaultValue="150"
-        style={{ background: "red" }}
-        disabled={isRunning ? "disabled" : null}
-        onChange={handleChange}
-      />
-      <div id="array-size">{`Size: ${size}`}</div>
+      <div id="size-range-container">
+        <div id="size-range-title">Size</div>
+        <input
+          id="change-size"
+          type="range"
+          min="20"
+          max="250"
+          step="10"
+          defaultValue="150"
+          style={{ background: "red" }}
+          disabled={isRunning ? "disabled" : null}
+          onChange={handleChange}
+        />
+        <div id="array-size">{size}</div>
+      </div>
     </nav>
   );
 };
