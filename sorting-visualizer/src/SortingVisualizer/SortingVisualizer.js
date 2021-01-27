@@ -9,39 +9,41 @@ const SortingVisualizer = () => {
   const MIN_HEIGHT = 5;
   const MAX_HEIGHT = 510;
 
-  const ANIMATION_BASE_SPEED = 3;
-
   const AQUA = "aqua";
   const RED = "red";
   const MAROON = "#800000";
 
-  const SIZE = 270;
-
   const [array, setArray] = useState([]);
-  const [size, setSize] = useState(SIZE);
+  const [size, setSize] = useState(150);
+  const [speed, setSpeed] = useState(3);
+  const [barWidth, setBarWidth] = useState(0.3466666);
 
   const barRefs = useRef([]);
 
   React.useEffect(() => {
-    resetArray();
+    resetArray(size);
     barRefs.current = new Array(size);
-  }, []);
+  }, [size]);
 
-  // const setSizeDefault = (n) => {
-  //   if (n > 0) {
-  //     setSize(n);
-  //   } else {
-  //     setSize(0);
-  //   }
-  // };
+  const sizeToBarWidth = (n) => {
+    return 52 / n;
+  };
+
+  const changeSize = (n) => {
+    setSize(n);
+    resetArray(n);
+    //change bar width
+    const barWidth = sizeToBarWidth(n);
+    setBarWidth(barWidth);
+  };
 
   const getRandomIntFromRange = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1) + min);
   };
 
-  const resetArray = () => {
+  const resetArray = (n) => {
     const newArray = [];
-    for (let i = 0; i < size; i++) {
+    for (let i = 0; i < n; i++) {
       newArray.push(getRandomIntFromRange(MIN_HEIGHT, MAX_HEIGHT));
     }
     setArray(newArray);
@@ -62,13 +64,13 @@ const SortingVisualizer = () => {
         setTimeout(() => {
           leftBarStyle.backgroundColor = color;
           rightBarStyle.backgroundColor = color;
-        }, i * ANIMATION_BASE_SPEED);
+        }, i * speed);
       } else {
         const [barIdx, newHeight] = animations[i];
         const barStyle = arrayBars[barIdx].style;
         setTimeout(() => {
           barStyle.height = `${newHeight}px`;
-        }, i * ANIMATION_BASE_SPEED);
+        }, i * speed);
       }
     }
   };
@@ -85,7 +87,7 @@ const SortingVisualizer = () => {
         const pivStyle = arrayBars[pivIdx].style;
         setTimeout(() => {
           pivStyle.backgroundColor = color;
-        }, i * ANIMATION_BASE_SPEED);
+        }, i * speed);
       } else if (type === "compare") {
         const action = animations[i].action;
         const color = action === "start" ? RED : AQUA;
@@ -95,7 +97,7 @@ const SortingVisualizer = () => {
         setTimeout(() => {
           barOneStyle.backgroundColor = color;
           barTwoStyle.backgroundColor = color;
-        }, i * ANIMATION_BASE_SPEED);
+        }, i * speed);
       } else {
         //swap
         const [barOneIdx, barTwoIdx] = animations[i].bars;
@@ -107,7 +109,7 @@ const SortingVisualizer = () => {
         setTimeout(() => {
           barOneStyle.height = `${barOneNewHeight}px`;
           barTwoStyle.height = `${barTwoNewHeight}px`;
-        }, i * ANIMATION_BASE_SPEED);
+        }, i * speed);
       }
     }
   };
@@ -126,7 +128,7 @@ const SortingVisualizer = () => {
         setTimeout(() => {
           barOneStyle.backgroundColor = color;
           barTwoStyle.backgroundColor = color;
-        }, i * ANIMATION_BASE_SPEED);
+        }, i * speed);
       } else {
         //swap
         const [barOneIdx, barTwoIdx] = animations[i].bars;
@@ -138,7 +140,7 @@ const SortingVisualizer = () => {
         setTimeout(() => {
           barOneStyle.height = `${barOneNewHeight}px`;
           barTwoStyle.height = `${barTwoNewHeight}px`;
-        }, i * ANIMATION_BASE_SPEED);
+        }, i * speed);
       }
     }
   };
@@ -150,12 +152,16 @@ const SortingVisualizer = () => {
         mergeSort={mergeSort}
         quickSort={quickSort}
         heapSort={heapSort}
+        size={size}
+        changeSize={changeSize}
+        setSpeed={setSpeed}
+        speed={speed}
       ></ToolBar>
       <div className="array-container">
         {array.map((val, idx) => (
           <div
             className="array-bar"
-            style={{ height: `${val}px` }}
+            style={{ height: `${val}px`, width: `${barWidth}%` }}
             key={idx}
             ref={(el) => (barRefs.current[idx] = el)}
           ></div>

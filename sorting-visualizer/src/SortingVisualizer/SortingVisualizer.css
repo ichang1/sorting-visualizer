@@ -4,11 +4,11 @@
   left: 5%;
   right: 5%;
   top: 12%;
-  vertical-align: bottom;
+  /* vertical-align: bottom; */
+  text-align: center;
 }
 
 .array-bar {
-  width: 0.19%;
   background-color: aqua;
   display: inline-block;
   margin: 1px;
