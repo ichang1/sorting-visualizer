@@ -15,7 +15,7 @@ const SortingVisualizer = () => {
 
   const [array, setArray] = useState([]);
   const [size, setSize] = useState(150);
-  const [speed, setSpeed] = useState(3);
+  const [speed, setSpeed] = useState(6);
   const [barWidth, setBarWidth] = useState(0.3466666);
 
   const barRefs = useRef([]);
@@ -35,6 +35,21 @@ const SortingVisualizer = () => {
     //change bar width
     const barWidth = sizeToBarWidth(n);
     setBarWidth(barWidth);
+  };
+
+  const sizeToSpeeds = () => {
+    //3 levels for speed
+    //slow, normal, fast
+    //scale speeds depending on size
+    //slow: 2, normal: 1, fast: 0
+
+    //slope is the speed for fast
+    // const slope = -(28 / 230) * size + 7460 / 230;
+    const slope = 500 / size;
+    const speed = (level) => {
+      return slope * level + slope;
+    };
+    return { slow: speed(2), normal: speed(1), fast: speed(0) };
   };
 
   const getRandomIntFromRange = (min, max) => {
@@ -155,7 +170,7 @@ const SortingVisualizer = () => {
         size={size}
         changeSize={changeSize}
         setSpeed={setSpeed}
-        speed={speed}
+        sizeToSpeeds={sizeToSpeeds}
       ></ToolBar>
       <div className="array-container">
         {array.map((val, idx) => (
