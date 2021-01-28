@@ -148,6 +148,14 @@ const SortingVisualizer = () => {
           barOneStyle.backgroundColor = color;
           barTwoStyle.backgroundColor = color;
         }, i * speed);
+      } else if (type === "parent") {
+        const action = animations[i].action;
+        const color = action === "start" ? MAROON : AQUA;
+        const parentIdx = animations[i].bar;
+        const parentStyle = arrayBars[parentIdx].style;
+        setTimeout(() => {
+          parentStyle.backgroundColor = color;
+        }, i * speed);
       } else {
         //swap
         const [barOneIdx, barTwoIdx] = animations[i].bars;

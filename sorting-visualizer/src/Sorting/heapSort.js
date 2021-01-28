@@ -50,9 +50,11 @@ const heapSort = (arr, animations) => {
 
 const heapifyDown = (arr, idx, endIdx, animations) => {
   while (idx <= endIdx) {
+    animations.push({ type: "parent", action: "start", bar: idx });
     const leftIdx = 2 * idx + 1;
     const rightIdx = 2 * idx + 2;
     if (leftIdx > endIdx && rightIdx > endIdx) {
+      animations.push({ type: "parent", action: "end", bar: idx });
       return;
     } else if (leftIdx <= endIdx && rightIdx <= endIdx) {
       const larger = arr[leftIdx] >= arr[rightIdx] ? leftIdx : rightIdx;
@@ -73,8 +75,10 @@ const heapifyDown = (arr, idx, endIdx, animations) => {
           heights: [arr[larger], arr[idx]],
         });
         [arr[idx], arr[larger]] = [arr[larger], arr[idx]];
+        animations.push({ type: "parent", action: "end", bar: idx });
         idx = larger;
       } else {
+        animations.push({ type: "parent", action: "end", bar: idx });
         return;
       }
     } else if (leftIdx <= endIdx) {
@@ -95,8 +99,10 @@ const heapifyDown = (arr, idx, endIdx, animations) => {
           heights: [arr[leftIdx], arr[idx]],
         });
         [arr[idx], arr[leftIdx]] = [arr[leftIdx], arr[idx]];
+        animations.push({ type: "parent", action: "end", bar: idx });
         idx = leftIdx;
       } else {
+        animations.push({ type: "parent", action: "end", bar: idx });
         return;
       }
     } else {
@@ -117,8 +123,10 @@ const heapifyDown = (arr, idx, endIdx, animations) => {
           heights: [arr[rightIdx], arr[idx]],
         });
         [arr[idx], arr[rightIdx]] = [arr[rightIdx], arr[idx]];
+        animations.push({ type: "parent", action: "end", bar: idx });
         idx = rightIdx;
       } else {
+        animations.push({ type: "parent", action: "end", bar: idx });
         return;
       }
     }
