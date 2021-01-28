@@ -1,17 +1,23 @@
 .array-container {
-  margin: 0%;
   position: absolute;
   width: 100%;
   /* left: 5%;
   right: 5%; */
-  top: 12%;
+  /* top: 12%; */
   height: 88%;
-  text-align: center;
-  background: radial-gradient(#a9a9a9, #9198e5);
+  display: flex;
+  justify-content: center;
+  align-self: center;
+  /* text-align: center; */
+  margin-top: auto;
+  margin-bottom: 0%;
+  background: radial-gradient(#ccccff, #666699);
 }
 
 .array-bar {
   background-color: aqua;
   display: inline-block;
   margin: 1px;
+  margin-top: auto;
+  margin-bottom: 0%;
 }

@@ -4,9 +4,11 @@
   background-color: #34495e;
   display: flex;
   align-items: center;
+  margin: 0%;
 }
 
 #get-array {
+  margin-left: 0.5%;
   color: #fff !important;
   text-transform: uppercase;
   text-decoration: none;
@@ -61,8 +63,9 @@
   border-color: brown;
   background-color: brown;
   display: flex;
+  align-content: flex-end;
   text-align: center;
-  width: 18%;
+  width: 250px;
 }
 
 #size-range-title {
@@ -86,8 +89,9 @@
   border-color: green;
   background-color: green;
   display: flex;
+  align-content: flex-end;
   text-align: center;
-  width: 16%;
+  width: 210px;
 }
 
 #speed-range-title {

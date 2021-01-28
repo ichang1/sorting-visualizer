@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./ToolBar.css";
+import useWindowDimensions from "./../Utils/windowDimensions.js";
 
 const ToolBar = ({
   getArray,
@@ -11,6 +12,12 @@ const ToolBar = ({
   setSpeed,
   sizeToSpeeds,
 }) => {
+  const { height, width } = useWindowDimensions();
+
+  const MIN_SIZE = 20;
+  const MAX_SIZE = 0.2 * width > 20 ? Math.floor(0.2 * width) : 60;
+  const STEP = 10;
+
   const [isRunning, setIsRunning] = useState(false);
   const [speeds, setSpeeds] = useState({});
   const [speedLabel, setSpeedLabel] = useState("Normal");
@@ -28,6 +35,7 @@ const ToolBar = ({
   const handleSizeChange = (e) => {
     const newSize = e.target.value;
     changeSize(parseInt(newSize));
+    console.log(MAX_SIZE);
   };
 
   const handleSpeedChange = (e) => {
@@ -70,9 +78,9 @@ const ToolBar = ({
         <input
           id="change-size"
           type="range"
-          min="20"
-          max="250"
-          step="10"
+          min={`${MIN_SIZE}`}
+          max={`${MAX_SIZE}`}
+          step={`${STEP}`}
           defaultValue="150"
           disabled={isRunning ? "disabled" : null}
           onChange={handleSizeChange}

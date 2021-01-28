@@ -1,16 +1,19 @@
 import React, { useState, useRef } from "react";
 import "./SortingVisualizer.css";
 import ToolBar from "./../ToolBar/ToolBar.js";
+import useWindowDimensions from "./../Utils/windowDimensions.js";
 import getMergeSortAnimations from "./../Sorting/mergeSort.js";
 import getQuickSortAnimations from "./../Sorting/quickSort.js";
 import getHeapSortAnimations from "./../Sorting/heapSort.js";
 
 const SortingVisualizer = () => {
+  const { height, width } = useWindowDimensions();
+
   const MIN_HEIGHT = 5;
-  const MAX_HEIGHT = 510;
+  const MAX_HEIGHT = height - 75;
 
   const AQUA = "aqua";
-  const RED = "red";
+  const RED = "#cc0000";
   const MAROON = "#800000";
 
   const [array, setArray] = useState([]);
@@ -61,6 +64,7 @@ const SortingVisualizer = () => {
     for (let i = 0; i < n; i++) {
       newArray.push(getRandomIntFromRange(MIN_HEIGHT, MAX_HEIGHT));
     }
+    console.log(height, width);
     setArray(newArray);
   };
 
@@ -172,7 +176,10 @@ const SortingVisualizer = () => {
         setSpeed={setSpeed}
         sizeToSpeeds={sizeToSpeeds}
       ></ToolBar>
-      <div className="array-container">
+      <div
+        className="array-container"
+        style={{ height: `${100 - 5000 / height}%` }}
+      >
         {array.map((val, idx) => (
           <div
             className="array-bar"
