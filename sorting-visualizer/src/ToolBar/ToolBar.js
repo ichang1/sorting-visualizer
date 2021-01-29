@@ -7,12 +7,13 @@ const ToolBar = ({
   mergeSort,
   quickSort,
   heapSort,
+  shellSort,
   size,
   changeSize,
   setSpeed,
   sizeToSpeeds,
 }) => {
-  const { height, width } = useWindowDimensions();
+  const { width } = useWindowDimensions();
 
   const MIN_SIZE = 20;
   const MAX_SIZE = 0.2 * width > 20 ? Math.floor(0.2 * width) : 60;
@@ -21,7 +22,7 @@ const ToolBar = ({
   const [isRunning, setIsRunning] = useState(false);
   const [speeds, setSpeeds] = useState({});
   const [speedLabel, setSpeedLabel] = useState("Normal");
-  const sortAlgorithms = [mergeSort, quickSort, heapSort];
+  const sortAlgorithms = [mergeSort, quickSort, heapSort, shellSort];
   const levelToSpeed = { 0: "Fast", 1: "Normal", 2: "Slow" };
 
   const N = 2;
@@ -30,12 +31,11 @@ const ToolBar = ({
     const newSpeeds = sizeToSpeeds(size);
     setSpeeds(newSpeeds);
     setSpeed(newSpeeds[speedLabel.toLowerCase()]);
-  }, [size]);
+  }, [size, setSpeeds, setSpeed, sizeToSpeeds, speedLabel]);
 
   const handleSizeChange = (e) => {
     const newSize = e.target.value;
     changeSize(parseInt(newSize));
-    console.log(MAX_SIZE);
   };
 
   const handleSpeedChange = (e) => {

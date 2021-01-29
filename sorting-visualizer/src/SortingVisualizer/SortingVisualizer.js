@@ -5,9 +5,10 @@ import useWindowDimensions from "./../Utils/windowDimensions.js";
 import getMergeSortAnimations from "./../Sorting/mergeSort.js";
 import getQuickSortAnimations from "./../Sorting/quickSort.js";
 import getHeapSortAnimations from "./../Sorting/heapSort.js";
+import getShellSortAnimations from "./../Sorting/shellSort.js";
 
 const SortingVisualizer = () => {
-  const { height, width } = useWindowDimensions();
+  const { height } = useWindowDimensions();
 
   const MIN_HEIGHT = 5;
   const MAX_HEIGHT = height - 75;
@@ -64,7 +65,6 @@ const SortingVisualizer = () => {
     for (let i = 0; i < n; i++) {
       newArray.push(getRandomIntFromRange(MIN_HEIGHT, MAX_HEIGHT));
     }
-    console.log(height, width);
     setArray(newArray);
   };
 
@@ -135,8 +135,8 @@ const SortingVisualizer = () => {
 
   const heapSort = () => {
     const animations = getHeapSortAnimations(array);
+    const arrayBars = barRefs.current;
     for (let i = 0; i < animations.length; i++) {
-      const arrayBars = barRefs.current;
       const type = animations[i].type;
       if (type === "compare") {
         const action = animations[i].action;
@@ -172,6 +172,59 @@ const SortingVisualizer = () => {
     }
   };
 
+  const shellSort = () => {
+    const animations = getShellSortAnimations(array);
+    const arrayBars = barRefs.current;
+    for (let i = 0; i < animations.length; i++) {
+      const type = animations[i].type;
+      if (type === "compare") {
+        const action = animations[i].action;
+        const color = action === "start" ? RED : AQUA;
+        const [barOneIdx, barTwoIdx] = animations[i].bars;
+        const barOneStyle = arrayBars[barOneIdx].style;
+        const barTwoStyle = arrayBars[barTwoIdx].style;
+        setTimeout(() => {
+          barOneStyle.backgroundColor = color;
+          barTwoStyle.backgroundColor = color;
+        }, i * speed);
+      } else if (type === "swap") {
+        const [barOneIdx, barTwoIdx] = animations[i].bars;
+        const [barOneStyle, barTwoStyle] = [
+          arrayBars[barOneIdx].style,
+          arrayBars[barTwoIdx].style,
+        ];
+        const [barOneNewHeight, barTwoNewHeight] = animations[i].heights;
+        setTimeout(() => {
+          barOneStyle.height = `${barOneNewHeight}px`;
+          barTwoStyle.height = `${barTwoNewHeight}px`;
+        }, i * speed);
+      } else if (type === "check") {
+        const action = animations[i].action;
+        const color = action === "start" ? RED : AQUA;
+        const barIdx = animations[i].bar;
+        const barStyle = arrayBars[barIdx].style;
+        setTimeout(() => {
+          barStyle.backgroundColor = color;
+        }, i * speed);
+      } else if (type === "shift") {
+        const barNewIdx = animations[i].bar + 1;
+        const barNewHeight = animations[i].height;
+        const barStyle = arrayBars[barNewIdx].style;
+        setTimeout(() => {
+          barStyle.height = `${barNewHeight}px`;
+        }, i * speed);
+      } else {
+        //insert
+        const barIdx = animations[i].bar;
+        const barHeight = animations[i].height;
+        const barStyle = arrayBars[barIdx].style;
+        setTimeout(() => {
+          barStyle.height = `${barHeight}px`;
+        }, i * speed);
+      }
+    }
+  };
+
   return (
     <div>
       <ToolBar
@@ -179,6 +232,7 @@ const SortingVisualizer = () => {
         mergeSort={mergeSort}
         quickSort={quickSort}
         heapSort={heapSort}
+        shellSort={shellSort}
         size={size}
         changeSize={changeSize}
         setSpeed={setSpeed}
