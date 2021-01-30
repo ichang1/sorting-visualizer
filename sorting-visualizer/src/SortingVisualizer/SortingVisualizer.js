@@ -11,8 +11,9 @@ import getBitonicSortAnimations from "./../Sorting/bitonicSort.js";
 const SortingVisualizer = () => {
   const { height } = useWindowDimensions();
 
+  const CONTAINER_HEIGHT_PERCENT = 100 - 7000 / height;
   const MIN_HEIGHT = 5;
-  const MAX_HEIGHT = height - 75;
+  const MAX_HEIGHT = (CONTAINER_HEIGHT_PERCENT / 100) * height - 10;
 
   const AQUA = "aqua";
   const RED = "#cc0000";
@@ -28,7 +29,13 @@ const SortingVisualizer = () => {
   React.useEffect(() => {
     resetArray(size);
     barRefs.current = new Array(size);
+    resetStatistics();
   }, [size]);
+
+  const resetStatistics = () => {
+    document.getElementById("comparisons").innerHTML = "Comparisons: 0";
+    document.getElementById("array-accesses").innerHTML = "Array accesses: 0";
+  };
 
   const sizeToBarWidth = (n) => {
     return 55 / n;
@@ -67,14 +74,17 @@ const SortingVisualizer = () => {
       newArray.push(getRandomIntFromRange(MIN_HEIGHT, MAX_HEIGHT));
     }
     setArray(newArray);
+    resetStatistics();
   };
 
   const mergeSort = () => {
-    const animations = getMergeSortAnimations(array);
-    // const arrayBars = document.getElementsByClassName("array-bar");
+    const { animations, statistics } = getMergeSortAnimations(array.slice());
+    console.log(animations, statistics);
     const arrayBars = barRefs.current;
     for (let i = 0; i < animations.length; i++) {
       const isColorChange = i % 3 !== 2;
+      const comparisons = statistics[i + 1].comparisons;
+      const accesses = statistics[i + 1].accesses;
       if (isColorChange) {
         //we are comparing or just  done comparing
         const [leftBarIdx, rightBarIdx] = animations[i];
@@ -84,12 +94,25 @@ const SortingVisualizer = () => {
         setTimeout(() => {
           leftBarStyle.backgroundColor = color;
           rightBarStyle.backgroundColor = color;
+
+          document.getElementById(
+            "comparisons"
+          ).innerHTML = `Comparisons: ${comparisons}`;
+          document.getElementById(
+            "array-accesses"
+          ).innerHTML = `Array accesses: ${accesses}`;
         }, i * speed);
       } else {
         const [barIdx, newHeight] = animations[i];
         const barStyle = arrayBars[barIdx].style;
         setTimeout(() => {
           barStyle.height = `${newHeight}px`;
+          document.getElementById(
+            "comparisons"
+          ).innerHTML = `Comparisons: ${comparisons}`;
+          document.getElementById(
+            "array-accesses"
+          ).innerHTML = `Array accesses: ${accesses}`;
         }, i * speed);
       }
     }
@@ -265,9 +288,13 @@ const SortingVisualizer = () => {
         setSpeed={setSpeed}
         sizeToSpeeds={sizeToSpeeds}
       ></ToolBar>
+      <div id="statistics">
+        <div id="comparisons">Comparisons: 0</div>
+        <div id="array-accesses">Array accesses: 0</div>
+      </div>
       <div
         className="array-container"
-        style={{ height: `${100 - 5000 / height}%` }}
+        style={{ height: `${CONTAINER_HEIGHT_PERCENT}%` }}
       >
         {array.map((val, idx) => (
           <div
