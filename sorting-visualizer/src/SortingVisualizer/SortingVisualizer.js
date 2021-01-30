@@ -157,7 +157,6 @@ const SortingVisualizer = () => {
 
   const heapSort = () => {
     const { animations, statistics } = getHeapSortAnimations(array);
-    console.log(animations, statistics);
     const arrayBars = barRefs.current;
     for (let i = 0; i < animations.length; i++) {
       const type = animations[i].type;
@@ -197,7 +196,7 @@ const SortingVisualizer = () => {
   };
 
   const shellSort = () => {
-    const animations = getShellSortAnimations(array);
+    const { animations, statistics } = getShellSortAnimations(array);
     const arrayBars = barRefs.current;
     for (let i = 0; i < animations.length; i++) {
       const type = animations[i].type;
@@ -210,6 +209,7 @@ const SortingVisualizer = () => {
         setTimeout(() => {
           barOneStyle.backgroundColor = color;
           barTwoStyle.backgroundColor = color;
+          setStatistics(statistics[i + 1]);
         }, i * speed);
       } else if (type === "swap") {
         const [barOneIdx, barTwoIdx] = animations[i].bars;
@@ -219,6 +219,7 @@ const SortingVisualizer = () => {
         setTimeout(() => {
           barOneStyle.height = `${barOneNewHeight}px`;
           barTwoStyle.height = `${barTwoNewHeight}px`;
+          setStatistics(statistics[i + 1]);
         }, i * speed);
       } else if (type === "check") {
         const action = animations[i].action;
@@ -227,6 +228,7 @@ const SortingVisualizer = () => {
         const barStyle = arrayBars[barIdx].style;
         setTimeout(() => {
           barStyle.backgroundColor = color;
+          setStatistics(statistics[i + 1]);
         }, i * speed);
       } else if (type === "shift") {
         const barNewIdx = animations[i].bar + 1;
@@ -234,6 +236,7 @@ const SortingVisualizer = () => {
         const barStyle = arrayBars[barNewIdx].style;
         setTimeout(() => {
           barStyle.height = `${barNewHeight}px`;
+          setStatistics(statistics[i + 1]);
         }, i * speed);
       } else {
         //insert
@@ -242,6 +245,7 @@ const SortingVisualizer = () => {
         const barStyle = arrayBars[barIdx].style;
         setTimeout(() => {
           barStyle.height = `${barHeight}px`;
+          setStatistics(statistics[i + 1]);
         }, i * speed);
       }
     }
