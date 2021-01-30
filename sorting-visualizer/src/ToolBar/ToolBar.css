@@ -7,8 +7,14 @@
   margin: 0%;
 }
 
+#get-array-container {
+  margin-left: auto;
+  margin-right: 3px;
+  display: flex;
+  align-content: flex-end;
+}
+
 #get-array {
-  margin-left: 0.5%;
   color: #fff !important;
   text-transform: uppercase;
   text-decoration: none;
@@ -16,6 +22,7 @@
   padding: 10px;
   border-radius: 50px;
   display: inline-block;
+  text-align: center;
   border: none;
   transition: all 0.4s ease 0s;
 }
@@ -30,10 +37,6 @@
   cursor: pointer;
   user-select: none;
 }
-
-/* #get-array:hover {
-  color: rgb(212, 212, 212);
-} */
 
 .sort-button {
   color: #494949 !important;
@@ -56,8 +59,8 @@
 }
 
 #size-range-container {
-  margin-left: auto;
-  margin-right: 0%;
+  margin-left: 3px;
+  margin-right: 3px;
   border: 3px solid;
   border-radius: 5px;
   border-color: brown;

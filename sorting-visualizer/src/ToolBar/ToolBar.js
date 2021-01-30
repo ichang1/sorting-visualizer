@@ -59,18 +59,6 @@ const ToolBar = ({
 
   return (
     <nav id="tool-bar">
-      <button
-        id="get-array"
-        onClick={
-          !isRunning
-            ? () => {
-                getArray(size);
-              }
-            : null
-        }
-      >
-        New Array
-      </button>
       {sortAlgorithms.map((algorithm, idx) => (
         <button
           className="sort-button"
@@ -80,6 +68,20 @@ const ToolBar = ({
           {algorithm.name}
         </button>
       ))}
+      <div id="get-array-container">
+        <button
+          id="get-array"
+          onClick={
+            !isRunning
+              ? () => {
+                  getArray(size);
+                }
+              : null
+          }
+        >
+          New Array
+        </button>
+      </div>
       <div id="size-range-container">
         <div id="size-range-title">Size</div>
         <input

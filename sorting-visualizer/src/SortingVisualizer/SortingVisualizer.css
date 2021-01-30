@@ -1,17 +1,14 @@
 .array-container {
   position: absolute;
   width: 100%;
-  /* left: 5%;
-  right: 5%; */
-  /* top: 12%; */
   height: 88%;
   display: flex;
   justify-content: center;
   align-self: center;
-  /* text-align: center; */
   margin-top: auto;
   margin-bottom: 0%;
-  background: radial-gradient(#ccccff, #666699);
+  background-color: #666699;
+  /* background: radial-gradient(#ccccff, #666699); */
 }
 
 .array-bar {
