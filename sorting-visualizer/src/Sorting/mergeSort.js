@@ -45,8 +45,8 @@ const merge = (arr, left, mid, right, aux, animations, statistics) => {
     // These are the number of comaprisons and array accesses at this frame
 
     const { comparisons, accesses } = statistics[statistics.length - 1];
-    statistics.push({ comparisons: comparisons + 3, accesses: accesses + 2 });
-    statistics.push({ comparisons: comparisons + 3, accesses: accesses + 2 });
+    statistics.push({ comparisons: comparisons + 2, accesses: accesses });
+    statistics.push({ comparisons: comparisons + 2, accesses: accesses });
 
     if (aux[i] <= aux[j]) {
       // We overwrite the value at index k in the original array with the
@@ -55,8 +55,8 @@ const merge = (arr, left, mid, right, aux, animations, statistics) => {
 
       const { comparisons, accesses } = statistics[statistics.length - 1];
       statistics.push({
-        comparisons: comparisons,
-        accesses: accesses + 2,
+        comparisons: comparisons + 1,
+        accesses: accesses + 4,
       });
 
       arr[k] = aux[i];
@@ -69,7 +69,7 @@ const merge = (arr, left, mid, right, aux, animations, statistics) => {
 
       const { comparisons, accesses } = statistics[statistics.length - 1];
       statistics.push({
-        comparisons: comparisons,
+        comparisons: comparisons + 1,
         accesses: accesses + 2,
       });
 
