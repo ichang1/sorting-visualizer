@@ -1,10 +1,11 @@
 const getHeapSortAnimations = (arr) => {
   const animations = [];
+  const statistics = [{ comparisons: 0, accesses: 0 }];
   if (arr.length <= 1) {
-    return animations;
+    return { animations, statistics };
   }
   // const newArr = arr.slice().sort((a, b) => a - b);
-  heapSort(arr, animations);
+  heapSort(arr, animations, statistics);
   // for (let i = 0; i < arr.length; i++) {
   //   if (arr[i] !== newArr[i]) {
   //     console.log(false, i);
@@ -14,13 +15,14 @@ const getHeapSortAnimations = (arr) => {
   //   }
   // }
   // console.log(true);
-  return animations;
+  return { animations, statistics };
 };
 
-const heapSort = (arr, animations) => {
+const heapSort = (arr, animations, statistics) => {
   const start = Math.floor(arr.length / 2);
   for (let i = start; i >= 0; i--) {
-    heapifyDown(arr, i, arr.length - 1, animations);
+    statistics[statistics.length - 1].comparisons += 1;
+    heapifyDown(arr, i, arr.length - 1, animations, statistics);
   }
   // console.log(arr);
   //the tree should be a max heap
@@ -29,9 +31,12 @@ const heapSort = (arr, animations) => {
     //cur max is at index 0
     animations.push({ type: "swap", bars: [0, i], heights: [arr[i], arr[0]] });
     [arr[0], arr[i]] = [arr[i], arr[0]];
-    // console.log(arr, i);
+
+    const { comparisons, accesses } = statistics[statistics.length - 1];
+    statistics.push({ comparisons: comparisons + 1, accesses: accesses + 2 });
+
     //heapify down on root
-    heapifyDown(arr, 0, i - 1, animations);
+    heapifyDown(arr, 0, i - 1, animations, statistics);
   }
 };
 
@@ -48,13 +53,18 @@ const heapSort = (arr, animations) => {
 //   }
 // };
 
-const heapifyDown = (arr, idx, endIdx, animations) => {
+const heapifyDown = (arr, idx, endIdx, animations, statistics) => {
   while (idx <= endIdx) {
+    const { comparisons, accesses } = statistics[statistics.length - 1];
+    statistics.push({ comparisons: comparisons + 1, accesses: accesses });
     animations.push({ type: "parent", action: "start", bar: idx });
     const leftIdx = 2 * idx + 1;
     const rightIdx = 2 * idx + 2;
+
     if (leftIdx > endIdx && rightIdx > endIdx) {
       animations.push({ type: "parent", action: "end", bar: idx });
+      const { comparisons, accesses } = statistics[statistics.length - 1];
+      statistics.push({ comparisons: comparisons + 2, accesses: accesses });
       return;
     } else if (leftIdx <= endIdx && rightIdx <= endIdx) {
       const larger = arr[leftIdx] >= arr[rightIdx] ? leftIdx : rightIdx;
@@ -68,6 +78,11 @@ const heapifyDown = (arr, idx, endIdx, animations) => {
         action: "end",
         bars: [leftIdx, rightIdx],
       });
+      let { comparisons, accesses } = statistics[statistics.length - 1];
+      statistics.push({ comparisons: comparisons + 3, accesses: accesses + 2 });
+      statistics.push({ comparisons: comparisons + 3, accesses: accesses + 2 });
+
+      ({ comparisons, accesses } = statistics[statistics.length - 1]);
       if (arr[larger] > arr[idx]) {
         animations.push({
           type: "swap",
@@ -75,10 +90,22 @@ const heapifyDown = (arr, idx, endIdx, animations) => {
           heights: [arr[larger], arr[idx]],
         });
         [arr[idx], arr[larger]] = [arr[larger], arr[idx]];
+        statistics.push({
+          comparisons: comparisons + 1,
+          accesses: accesses + 4,
+        });
         animations.push({ type: "parent", action: "end", bar: idx });
+        statistics.push({
+          comparisons: comparisons + 1,
+          accesses: accesses + 4,
+        });
         idx = larger;
       } else {
         animations.push({ type: "parent", action: "end", bar: idx });
+        statistics.push({
+          comparisons: comparisons + 1,
+          accesses: accesses + 1,
+        });
         return;
       }
     } else if (leftIdx <= endIdx) {
@@ -92,6 +119,12 @@ const heapifyDown = (arr, idx, endIdx, animations) => {
         action: "end",
         bars: [leftIdx, leftIdx],
       });
+
+      let { comparisons, accesses } = statistics[statistics.length - 1];
+      statistics.push({ comparisons: comparisons + 3, accesses: accesses });
+      statistics.push({ comparisons: comparisons + 3, accesses: accesses });
+
+      ({ comparisons, accesses } = statistics[statistics.length - 1]);
       if (arr[leftIdx] > arr[idx]) {
         animations.push({
           type: "swap",
@@ -100,8 +133,20 @@ const heapifyDown = (arr, idx, endIdx, animations) => {
         });
         [arr[idx], arr[leftIdx]] = [arr[leftIdx], arr[idx]];
         animations.push({ type: "parent", action: "end", bar: idx });
+        statistics.push({
+          comparisons: comparisons + 1,
+          accesses: accesses + 4,
+        });
+        statistics.push({
+          comparisons: comparisons + 1,
+          accesses: accesses + 4,
+        });
         idx = leftIdx;
       } else {
+        statistics.push({
+          comparisons: comparisons + 1,
+          accesses: accesses + 2,
+        });
         animations.push({ type: "parent", action: "end", bar: idx });
         return;
       }
@@ -116,17 +161,34 @@ const heapifyDown = (arr, idx, endIdx, animations) => {
         action: "end",
         bars: [rightIdx, rightIdx],
       });
+      let { comparisons, accesses } = statistics[statistics.length - 1];
+      statistics.push({ comparisons: comparisons + 3, accesses: accesses });
+      statistics.push({ comparisons: comparisons + 3, accesses: accesses });
+      ({ comparisons, accesses } = statistics[statistics.length - 1]);
       if (arr[rightIdx] > arr[idx]) {
         animations.push({
           type: "swap",
           bars: [idx, rightIdx],
           heights: [arr[rightIdx], arr[idx]],
         });
+        statistics.push({
+          comparisons: comparisons + 1,
+          accesses: accesses + 4,
+        });
+        statistics.push({
+          comparisons: comparisons + 1,
+          accesses: accesses + 4,
+        });
+
         [arr[idx], arr[rightIdx]] = [arr[rightIdx], arr[idx]];
         animations.push({ type: "parent", action: "end", bar: idx });
         idx = rightIdx;
       } else {
         animations.push({ type: "parent", action: "end", bar: idx });
+        statistics.push({
+          comparisons: comparisons + 1,
+          accesses: accesses + 2,
+        });
         return;
       }
     }

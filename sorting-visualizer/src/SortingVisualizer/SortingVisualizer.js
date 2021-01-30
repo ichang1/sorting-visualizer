@@ -156,7 +156,8 @@ const SortingVisualizer = () => {
   };
 
   const heapSort = () => {
-    const animations = getHeapSortAnimations(array);
+    const { animations, statistics } = getHeapSortAnimations(array);
+    console.log(animations, statistics);
     const arrayBars = barRefs.current;
     for (let i = 0; i < animations.length; i++) {
       const type = animations[i].type;
@@ -169,6 +170,7 @@ const SortingVisualizer = () => {
         setTimeout(() => {
           barOneStyle.backgroundColor = color;
           barTwoStyle.backgroundColor = color;
+          setStatistics(statistics[i + 1]);
         }, i * speed);
       } else if (type === "parent") {
         const action = animations[i].action;
@@ -177,6 +179,7 @@ const SortingVisualizer = () => {
         const parentStyle = arrayBars[parentIdx].style;
         setTimeout(() => {
           parentStyle.backgroundColor = color;
+          setStatistics(statistics[i + 1]);
         }, i * speed);
       } else {
         //swap
@@ -187,6 +190,7 @@ const SortingVisualizer = () => {
         setTimeout(() => {
           barOneStyle.height = `${barOneNewHeight}px`;
           barTwoStyle.height = `${barTwoNewHeight}px`;
+          setStatistics(statistics[i + 1]);
         }, i * speed);
       }
     }
