@@ -10,6 +10,7 @@ const getMergeSortAnimations = (arr) => {
   if (arr.length <= 1) {
     return { animations, statistics };
   }
+  statistics[0].comparisons += 1;
   const aux = arr.slice();
   mergeSortHelp(arr, 0, arr.length - 1, aux, animations, statistics);
   return { animations, statistics };
@@ -17,6 +18,7 @@ const getMergeSortAnimations = (arr) => {
 
 const mergeSortHelp = (arr, left, right, aux, animations, statistics) => {
   if (left === right) return;
+  statistics[statistics.length - 1].comparisons += 1;
   const mid = Math.floor((left + right) / 2);
   //get the hills on the left and right
   mergeSortHelp(aux, left, mid, arr, animations, statistics);
@@ -43,8 +45,8 @@ const merge = (arr, left, mid, right, aux, animations, statistics) => {
     // These are the number of comaprisons and array accesses at this frame
 
     const { comparisons, accesses } = statistics[statistics.length - 1];
-    statistics.push({ comparisons: comparisons + 1, accesses: accesses + 2 });
-    statistics.push({ comparisons: comparisons + 1, accesses: accesses + 2 });
+    statistics.push({ comparisons: comparisons + 3, accesses: accesses + 2 });
+    statistics.push({ comparisons: comparisons + 3, accesses: accesses + 2 });
 
     if (aux[i] <= aux[j]) {
       // We overwrite the value at index k in the original array with the
@@ -92,9 +94,9 @@ const merge = (arr, left, mid, right, aux, animations, statistics) => {
 
     // These are the number of comaprisons and array accesses at this frame
     const { comparisons, accesses } = statistics[statistics.length - 1];
-    statistics.push({ comparisons: comparisons, accesses: accesses + 2 });
-    statistics.push({ comparisons: comparisons, accesses: accesses + 2 });
-    statistics.push({ comparisons: comparisons, accesses: accesses + 2 });
+    statistics.push({ comparisons: comparisons + 1, accesses: accesses + 2 });
+    statistics.push({ comparisons: comparisons + 1, accesses: accesses + 2 });
+    statistics.push({ comparisons: comparisons + 1, accesses: accesses + 2 });
 
     arr[k] = aux[i];
     k++;
@@ -113,9 +115,9 @@ const merge = (arr, left, mid, right, aux, animations, statistics) => {
     animations.push([k, aux[j]]);
 
     const { comparisons, accesses } = statistics[statistics.length - 1];
-    statistics.push({ comparisons: comparisons, accesses: accesses + 2 });
-    statistics.push({ comparisons: comparisons, accesses: accesses + 2 });
-    statistics.push({ comparisons: comparisons, accesses: accesses + 2 });
+    statistics.push({ comparisons: comparisons + 1, accesses: accesses + 2 });
+    statistics.push({ comparisons: comparisons + 1, accesses: accesses + 2 });
+    statistics.push({ comparisons: comparisons + 1, accesses: accesses + 2 });
 
     arr[k] = aux[j];
     k++;
