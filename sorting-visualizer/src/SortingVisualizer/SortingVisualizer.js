@@ -228,6 +228,27 @@ const SortingVisualizer = () => {
 
   const bitonicSort = () => {
     const animations = getBitonicSortAnimations(array);
+    const arrayBars = barRefs.current;
+    for (let i = 0; i < animations.length; i++) {
+      const type = animations[i].type;
+      const [barOneIdx, barTwoIdx] = animations[i].bars;
+      const barOneStyle = arrayBars[barOneIdx].style;
+      const barTwoStyle = arrayBars[barTwoIdx].style;
+      if (type === "compare") {
+        const action = animations[i].action;
+        const color = action === "start" ? RED : AQUA;
+        setTimeout(() => {
+          barOneStyle.backgroundColor = color;
+          barTwoStyle.backgroundColor = color;
+        }, i * speed);
+      } else {
+        const [barOneNewHeight, barTwoNewHeight] = animations[i].heights;
+        setTimeout(() => {
+          barOneStyle.height = `${barOneNewHeight}px`;
+          barTwoStyle.height = `${barTwoNewHeight}px`;
+        }, i * speed);
+      }
+    }
   };
 
   return (

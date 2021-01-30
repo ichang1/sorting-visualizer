@@ -23,7 +23,7 @@ const bitonicSort = (arr, animations) => {
 
 const bitonicSortHelp = (arr, start, n, dir, animations) => {
   if (n > 1) {
-    let m = Math.floor(n / 2);
+    const m = Math.floor(n / 2);
     bitonicSortHelp(arr, start, m, !dir, animations);
     bitonicSortHelp(arr, start + m, n - m, dir, animations);
     merge(arr, start, n, dir, animations);
@@ -34,13 +34,20 @@ const merge = (arr, start, n, dir, animations) => {
   if (n > 1) {
     const m = maxPowerTwoLessThan(n);
     for (let i = start; i < start + n - m; i++) {
+      animations.push({ type: "compare", action: "start", bars: [i, i + m] });
       if (dir === arr[i] > arr[i + m]) {
         //direction is the same as inversion direction
+        animations.push({
+          type: "swap",
+          bars: [i, i + m],
+          heights: [arr[i + m], arr[i]],
+        });
         [arr[i], arr[i + m]] = [arr[i + m], arr[i]];
       }
+      animations.push({ type: "compare", action: "end", bars: [i, i + m] });
     }
-    merge(arr, start, m, dir);
-    merge(arr, start + m, n - m, dir);
+    merge(arr, start, m, dir, animations);
+    merge(arr, start + m, n - m, dir, animations);
   }
 };
 
