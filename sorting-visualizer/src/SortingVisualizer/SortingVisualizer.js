@@ -6,6 +6,7 @@ import getMergeSortAnimations from "./../Sorting/mergeSort.js";
 import getQuickSortAnimations from "./../Sorting/quickSort.js";
 import getHeapSortAnimations from "./../Sorting/heapSort.js";
 import getShellSortAnimations from "./../Sorting/shellSort.js";
+import getBitonicSortAnimations from "./../Sorting/bitonicSort.js";
 
 const SortingVisualizer = () => {
   const { height } = useWindowDimensions();
@@ -225,6 +226,10 @@ const SortingVisualizer = () => {
     }
   };
 
+  const bitonicSort = () => {
+    const animations = getBitonicSortAnimations(array);
+  };
+
   return (
     <div>
       <ToolBar
@@ -233,6 +238,7 @@ const SortingVisualizer = () => {
         quickSort={quickSort}
         heapSort={heapSort}
         shellSort={shellSort}
+        bitonicSort={bitonicSort}
         size={size}
         changeSize={changeSize}
         setSpeed={setSpeed}

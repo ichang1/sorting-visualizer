@@ -8,6 +8,7 @@ const ToolBar = ({
   quickSort,
   heapSort,
   shellSort,
+  bitonicSort,
   size,
   changeSize,
   setSpeed,
@@ -22,7 +23,13 @@ const ToolBar = ({
   const [isRunning, setIsRunning] = useState(false);
   const [speeds, setSpeeds] = useState({});
   const [speedLabel, setSpeedLabel] = useState("Normal");
-  const sortAlgorithms = [mergeSort, quickSort, heapSort, shellSort];
+  const sortAlgorithms = [
+    mergeSort,
+    quickSort,
+    heapSort,
+    shellSort,
+    bitonicSort,
+  ];
   const levelToSpeed = { 0: "Fast", 1: "Normal", 2: "Slow" };
 
   const N = 2;
