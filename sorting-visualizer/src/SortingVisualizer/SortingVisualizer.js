@@ -77,14 +77,21 @@ const SortingVisualizer = () => {
     resetStatistics();
   };
 
+  const setStatistics = (curStats) => {
+    const { comparisons, accesses } = curStats;
+    document.getElementById(
+      "comparisons"
+    ).innerHTML = `Comparisons: ${comparisons}`;
+    document.getElementById(
+      "array-accesses"
+    ).innerHTML = `Array accesses: ${accesses}`;
+  };
+
   const mergeSort = () => {
     const { animations, statistics } = getMergeSortAnimations(array.slice());
-    console.log(animations, statistics);
     const arrayBars = barRefs.current;
     for (let i = 0; i < animations.length; i++) {
       const isColorChange = i % 3 !== 2;
-      const comparisons = statistics[i + 1].comparisons;
-      const accesses = statistics[i + 1].accesses;
       if (isColorChange) {
         //we are comparing or just  done comparing
         const [leftBarIdx, rightBarIdx] = animations[i];
@@ -95,31 +102,21 @@ const SortingVisualizer = () => {
           leftBarStyle.backgroundColor = color;
           rightBarStyle.backgroundColor = color;
 
-          document.getElementById(
-            "comparisons"
-          ).innerHTML = `Comparisons: ${comparisons}`;
-          document.getElementById(
-            "array-accesses"
-          ).innerHTML = `Array accesses: ${accesses}`;
+          setStatistics(statistics[i + 1]);
         }, i * speed);
       } else {
         const [barIdx, newHeight] = animations[i];
         const barStyle = arrayBars[barIdx].style;
         setTimeout(() => {
           barStyle.height = `${newHeight}px`;
-          document.getElementById(
-            "comparisons"
-          ).innerHTML = `Comparisons: ${comparisons}`;
-          document.getElementById(
-            "array-accesses"
-          ).innerHTML = `Array accesses: ${accesses}`;
+          setStatistics(statistics[i + 1]);
         }, i * speed);
       }
     }
   };
 
   const quickSort = () => {
-    const animations = getQuickSortAnimations(array);
+    const { animations, statistics } = getQuickSortAnimations(array);
     const arrayBars = barRefs.current;
     for (let i = 0; i < animations.length; i++) {
       const type = animations[i].type;
@@ -130,6 +127,7 @@ const SortingVisualizer = () => {
         const pivStyle = arrayBars[pivIdx].style;
         setTimeout(() => {
           pivStyle.backgroundColor = color;
+          setStatistics(statistics[i + 1]);
         }, i * speed);
       } else if (type === "compare") {
         const action = animations[i].action;
@@ -140,18 +138,18 @@ const SortingVisualizer = () => {
         setTimeout(() => {
           barOneStyle.backgroundColor = color;
           barTwoStyle.backgroundColor = color;
+          setStatistics(statistics[i + 1]);
         }, i * speed);
       } else {
         //swap
         const [barOneIdx, barTwoIdx] = animations[i].bars;
-        const [barOneStyle, barTwoStyle] = [
-          arrayBars[barOneIdx].style,
-          arrayBars[barTwoIdx].style,
-        ];
+        const barOneStyle = arrayBars[barOneIdx].style;
+        const barTwoStyle = arrayBars[barTwoIdx].style;
         const [barOneNewHeight, barTwoNewHeight] = animations[i].heights;
         setTimeout(() => {
           barOneStyle.height = `${barOneNewHeight}px`;
           barTwoStyle.height = `${barTwoNewHeight}px`;
+          setStatistics(statistics[i + 1]);
         }, i * speed);
       }
     }
@@ -183,10 +181,8 @@ const SortingVisualizer = () => {
       } else {
         //swap
         const [barOneIdx, barTwoIdx] = animations[i].bars;
-        const [barOneStyle, barTwoStyle] = [
-          arrayBars[barOneIdx].style,
-          arrayBars[barTwoIdx].style,
-        ];
+        const barOneStyle = arrayBars[barOneIdx].style;
+        const barTwoStyle = arrayBars[barTwoIdx].style;
         const [barOneNewHeight, barTwoNewHeight] = animations[i].heights;
         setTimeout(() => {
           barOneStyle.height = `${barOneNewHeight}px`;
@@ -213,10 +209,8 @@ const SortingVisualizer = () => {
         }, i * speed);
       } else if (type === "swap") {
         const [barOneIdx, barTwoIdx] = animations[i].bars;
-        const [barOneStyle, barTwoStyle] = [
-          arrayBars[barOneIdx].style,
-          arrayBars[barTwoIdx].style,
-        ];
+        const barOneStyle = arrayBars[barOneIdx].style;
+        const barTwoStyle = arrayBars[barTwoIdx].style;
         const [barOneNewHeight, barTwoNewHeight] = animations[i].heights;
         setTimeout(() => {
           barOneStyle.height = `${barOneNewHeight}px`;

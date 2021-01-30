@@ -1,10 +1,11 @@
 const getQuickSortAnimations = (arr) => {
   const animations = [];
+  const statistics = [{ comparisons: 0, accesses: 0 }];
   if (arr.length <= 1) {
-    return animations;
+    return { animations, statistics };
   }
   // const newArr = arr.slice().sort((a, b) => a - b);
-  quickSortHelp(arr, 0, arr.length - 1, animations);
+  quickSortHelp(arr, 0, arr.length - 1, animations, statistics);
   // for (let i = 0; i < arr.length; i++) {
   //   if (arr[i] !== newArr[i]) {
   //     console.log(false);
@@ -14,26 +15,34 @@ const getQuickSortAnimations = (arr) => {
   //   }
   // }
   // console.log(true);
-  return animations;
+  return { animations, statistics };
 };
 
-const quickSortHelp = (arr, left, right, animations) => {
+const quickSortHelp = (arr, left, right, animations, statistics) => {
   if (left >= right) return;
-  let pivot = partition(arr, left, right, animations);
-  quickSortHelp(arr, left, pivot - (pivot === right), animations);
-  quickSortHelp(arr, pivot + 1, right, animations);
+  let pivot = partition(arr, left, right, animations, statistics);
+  quickSortHelp(arr, left, pivot - (pivot === right), animations, statistics);
+  quickSortHelp(arr, pivot + 1, right, animations, statistics);
 };
 
-const partition = (arr, left, right, animations) => {
+const partition = (arr, left, right, animations, statistics) => {
   const mid = Math.floor((left + right) / 2);
   let pivIdx = mid;
   const piv = arr[pivIdx];
   animations.push({ type: "pivot", action: "start", idx: pivIdx });
+
+  const { comparisons, accesses } = statistics[statistics.length - 1];
+  statistics.push({ comparisons: comparisons, accesses: accesses + 1 });
+
   let i = left;
   let j = right;
   while (i < pivIdx && j > pivIdx) {
     animations.push({ type: "compare", action: "start", bars: [i, j] });
     animations.push({ type: "compare", action: "end", bars: [i, j] });
+
+    const { comparisons, accesses } = statistics[statistics.length - 1];
+    statistics.push({ comparisons: comparisons + 2, accesses: accesses + 2 });
+    statistics.push({ comparisons: comparisons + 2, accesses: accesses + 2 });
 
     if (arr[i] > piv && arr[j] < piv) {
       animations.push({
@@ -42,9 +51,15 @@ const partition = (arr, left, right, animations) => {
         heights: [arr[j], arr[i]],
       });
       [arr[i], arr[j]] = [arr[j], arr[i]];
+
+      const { comparisons, accesses } = statistics[statistics.length - 1];
+      statistics.push({ comparisons: comparisons, accesses: accesses + 2 });
+
       i += 1;
       j -= 1;
     } else if (arr[i] <= piv) {
+      statistics[statistics.length - 1].comparison += 1;
+      statistics[statistics.length - 1].accesses += 1;
       i += 1;
     } else {
       j -= 1;
@@ -55,6 +70,11 @@ const partition = (arr, left, right, animations) => {
     for (let k = i; k < mid; k++) {
       animations.push({ type: "compare", action: "start", bars: [k, k] });
       animations.push({ type: "compare", action: "end", bars: [k, k] });
+
+      const { comparisons, accesses } = statistics[statistics.length - 1];
+      statistics.push({ comparisons: comparisons + 1, accesses: accesses + 1 });
+      statistics.push({ comparisons: comparisons + 1, accesses: accesses + 1 });
+
       if (arr[k] <= piv) {
         animations.push({
           type: "swap",
@@ -62,16 +82,29 @@ const partition = (arr, left, right, animations) => {
           heights: [arr[idx], arr[k]],
         });
         [arr[k], arr[idx]] = [arr[idx], arr[k]];
+
+        const { comparisons, accesses } = statistics[statistics.length - 1];
+        statistics.push({ comparisons: comparisons, accesses: accesses + 2 });
+
         idx += 1;
       }
     }
+    const { comparisons, accesses } = statistics[statistics.length - 1];
+
     animations.push({
       type: "swap",
       bars: [idx, mid],
       heights: [arr[mid], arr[idx]],
     });
+    statistics.push({ comparisons: comparisons, accesses: accesses });
+
     animations.push({ type: "pivot", action: "end", idx: pivIdx });
+    statistics.push({ comparisons: comparisons, accesses: accesses });
+
     [arr[idx], arr[mid]] = [arr[mid], arr[idx]];
+
+    statistics.push({ comparisons: comparisons, accesses: accesses + 2 });
+
     pivIdx = idx;
     animations.push({ type: "pivot", action: "start", idx: pivIdx });
   } else {
@@ -79,6 +112,11 @@ const partition = (arr, left, right, animations) => {
     for (let k = j; k > mid; k--) {
       animations.push({ type: "compare", action: "start", bars: [k, k] });
       animations.push({ type: "compare", action: "end", bars: [k, k] });
+
+      const { comparisons, accesses } = statistics[statistics.length - 1];
+      statistics.push({ comparisons: comparisons + 1, accesses: accesses + 1 });
+      statistics.push({ comparisons: comparisons + 1, accesses: accesses + 1 });
+
       if (arr[k] >= piv) {
         animations.push({
           type: "swap",
@@ -86,20 +124,42 @@ const partition = (arr, left, right, animations) => {
           heights: [arr[idx], arr[k]],
         });
         [arr[k], arr[idx]] = [arr[idx], arr[k]];
+
+        const { comparisons, accesses } = statistics[statistics.length - 1];
+        statistics.push({ comparisons: comparisons, accesses: accesses + 2 });
+
         idx -= 1;
       }
     }
+
+    const { comparisons, accesses } = statistics[statistics.length - 1];
+
     animations.push({
       type: "swap",
       bars: [idx, mid],
       heights: [arr[mid], arr[idx]],
     });
+
+    statistics.push({ comparisons: comparisons, accesses: accesses });
+
     animations.push({ type: "pivot", action: "end", idx: pivIdx });
+
+    statistics.push({ comparisons: comparisons, accesses: accesses });
+
     [arr[idx], arr[mid]] = [arr[mid], arr[idx]];
+
+    statistics.push({ comparisons: comparisons, accesses: accesses + 2 });
+
     pivIdx = idx;
     animations.push({ type: "pivot", action: "start", idx: pivIdx });
   }
   animations.push({ type: "pivot", action: "end", idx: pivIdx });
+
+  statistics.push({
+    comparisons: statistics[statistics.length - 1].comparisons,
+    accesses: statistics[statistics.length - 1].accesses + 2,
+  });
+
   return pivIdx;
 };
 
