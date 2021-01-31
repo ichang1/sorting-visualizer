@@ -8,6 +8,7 @@ const getMergeSortAnimations = (arr) => {
   //the bars at these 2 indices should revert back to the normal color
   //the third one has the height change at an index for a combined hill
   if (arr.length <= 1) {
+    statistics[0].comparisons += 1;
     return { animations, statistics };
   }
   statistics[0].comparisons += 1;
@@ -45,8 +46,8 @@ const merge = (arr, left, mid, right, aux, animations, statistics) => {
     // These are the number of comaprisons and array accesses at this frame
 
     const { comparisons, accesses } = statistics[statistics.length - 1];
-    statistics.push({ comparisons: comparisons + 2, accesses: accesses });
-    statistics.push({ comparisons: comparisons + 2, accesses: accesses });
+    statistics.push({ comparisons: comparisons, accesses: accesses });
+    statistics.push({ comparisons: comparisons, accesses: accesses });
 
     if (aux[i] <= aux[j]) {
       // We overwrite the value at index k in the original array with the
@@ -94,9 +95,9 @@ const merge = (arr, left, mid, right, aux, animations, statistics) => {
 
     // These are the number of comaprisons and array accesses at this frame
     const { comparisons, accesses } = statistics[statistics.length - 1];
-    statistics.push({ comparisons: comparisons + 1, accesses: accesses + 2 });
-    statistics.push({ comparisons: comparisons + 1, accesses: accesses + 2 });
-    statistics.push({ comparisons: comparisons + 1, accesses: accesses + 2 });
+    statistics.push({ comparisons: comparisons, accesses: accesses + 2 });
+    statistics.push({ comparisons: comparisons, accesses: accesses + 2 });
+    statistics.push({ comparisons: comparisons, accesses: accesses + 2 });
 
     arr[k] = aux[i];
     k++;
@@ -115,9 +116,9 @@ const merge = (arr, left, mid, right, aux, animations, statistics) => {
     animations.push([k, aux[j]]);
 
     const { comparisons, accesses } = statistics[statistics.length - 1];
-    statistics.push({ comparisons: comparisons + 1, accesses: accesses + 2 });
-    statistics.push({ comparisons: comparisons + 1, accesses: accesses + 2 });
-    statistics.push({ comparisons: comparisons + 1, accesses: accesses + 2 });
+    statistics.push({ comparisons: comparisons, accesses: accesses + 2 });
+    statistics.push({ comparisons: comparisons, accesses: accesses + 2 });
+    statistics.push({ comparisons: comparisons, accesses: accesses + 2 });
 
     arr[k] = aux[j];
     k++;

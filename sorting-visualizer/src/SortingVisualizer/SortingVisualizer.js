@@ -252,7 +252,7 @@ const SortingVisualizer = () => {
   };
 
   const bitonicSort = () => {
-    const animations = getBitonicSortAnimations(array);
+    const { animations, statistics } = getBitonicSortAnimations(array);
     const arrayBars = barRefs.current;
     for (let i = 0; i < animations.length; i++) {
       const type = animations[i].type;
@@ -265,12 +265,14 @@ const SortingVisualizer = () => {
         setTimeout(() => {
           barOneStyle.backgroundColor = color;
           barTwoStyle.backgroundColor = color;
+          setStatistics(statistics[i + 1]);
         }, i * speed);
       } else {
         const [barOneNewHeight, barTwoNewHeight] = animations[i].heights;
         setTimeout(() => {
           barOneStyle.height = `${barOneNewHeight}px`;
           barTwoStyle.height = `${barTwoNewHeight}px`;
+          setStatistics(statistics[i + 1]);
         }, i * speed);
       }
     }

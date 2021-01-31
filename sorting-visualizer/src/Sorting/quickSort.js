@@ -2,6 +2,7 @@ const getQuickSortAnimations = (arr) => {
   const animations = [];
   const statistics = [{ comparisons: 0, accesses: 0 }];
   if (arr.length <= 1) {
+    statistics[0].comparisons += 1;
     return { animations, statistics };
   }
   statistics[0].comparisons += 1;
@@ -47,8 +48,8 @@ const partition = (arr, left, right, animations, statistics) => {
     animations.push({ type: "compare", action: "end", bars: [i, j] });
 
     const { comparisons, accesses } = statistics[statistics.length - 1];
-    statistics.push({ comparisons: comparisons + 2, accesses: accesses });
-    statistics.push({ comparisons: comparisons + 2, accesses: accesses });
+    statistics.push({ comparisons: comparisons, accesses: accesses });
+    statistics.push({ comparisons: comparisons, accesses: accesses });
 
     if (arr[i] > piv && arr[j] < piv) {
       animations.push({
@@ -82,8 +83,8 @@ const partition = (arr, left, right, animations, statistics) => {
       animations.push({ type: "compare", action: "end", bars: [k, k] });
 
       const { comparisons, accesses } = statistics[statistics.length - 1];
-      statistics.push({ comparisons: comparisons + 1, accesses: accesses });
-      statistics.push({ comparisons: comparisons + 1, accesses: accesses });
+      statistics.push({ comparisons: comparisons, accesses: accesses });
+      statistics.push({ comparisons: comparisons, accesses: accesses });
 
       if (arr[k] <= piv) {
         animations.push({
@@ -128,8 +129,8 @@ const partition = (arr, left, right, animations, statistics) => {
       animations.push({ type: "compare", action: "end", bars: [k, k] });
 
       const { comparisons, accesses } = statistics[statistics.length - 1];
-      statistics.push({ comparisons: comparisons + 1, accesses: accesses });
-      statistics.push({ comparisons: comparisons + 1, accesses: accesses });
+      statistics.push({ comparisons: comparisons, accesses: accesses });
+      statistics.push({ comparisons: comparisons, accesses: accesses });
 
       if (arr[k] >= piv) {
         animations.push({

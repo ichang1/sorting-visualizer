@@ -2,8 +2,10 @@ const getHeapSortAnimations = (arr) => {
   const animations = [];
   const statistics = [{ comparisons: 0, accesses: 0 }];
   if (arr.length <= 1) {
+    statistics[0].comparisons += 1;
     return { animations, statistics };
   }
+  statistics[0].comparisons += 1;
   // const newArr = arr.slice().sort((a, b) => a - b);
   heapSort(arr, animations, statistics);
   // for (let i = 0; i < arr.length; i++) {
@@ -21,10 +23,8 @@ const getHeapSortAnimations = (arr) => {
 const heapSort = (arr, animations, statistics) => {
   const start = Math.floor(arr.length / 2);
   for (let i = start; i >= 0; i--) {
-    statistics[statistics.length - 1].comparisons += 1;
     heapifyDown(arr, i, arr.length - 1, animations, statistics);
   }
-  // console.log(arr);
   //the tree should be a max heap
   for (let i = arr.length - 1; i > 0; i--) {
     //move cur max to the back
@@ -33,7 +33,7 @@ const heapSort = (arr, animations, statistics) => {
     [arr[0], arr[i]] = [arr[i], arr[0]];
 
     const { comparisons, accesses } = statistics[statistics.length - 1];
-    statistics.push({ comparisons: comparisons + 1, accesses: accesses + 2 });
+    statistics.push({ comparisons: comparisons, accesses: accesses + 2 });
 
     //heapify down on root
     heapifyDown(arr, 0, i - 1, animations, statistics);
@@ -56,7 +56,7 @@ const heapSort = (arr, animations, statistics) => {
 const heapifyDown = (arr, idx, endIdx, animations, statistics) => {
   while (idx <= endIdx) {
     const { comparisons, accesses } = statistics[statistics.length - 1];
-    statistics.push({ comparisons: comparisons + 1, accesses: accesses });
+    statistics.push({ comparisons: comparisons, accesses: accesses });
     animations.push({ type: "parent", action: "start", bar: idx });
     const leftIdx = 2 * idx + 1;
     const rightIdx = 2 * idx + 2;
@@ -64,7 +64,7 @@ const heapifyDown = (arr, idx, endIdx, animations, statistics) => {
     if (leftIdx > endIdx && rightIdx > endIdx) {
       animations.push({ type: "parent", action: "end", bar: idx });
       const { comparisons, accesses } = statistics[statistics.length - 1];
-      statistics.push({ comparisons: comparisons + 2, accesses: accesses });
+      statistics.push({ comparisons: comparisons, accesses: accesses });
       return;
     } else if (leftIdx <= endIdx && rightIdx <= endIdx) {
       const larger = arr[leftIdx] >= arr[rightIdx] ? leftIdx : rightIdx;
