@@ -16,12 +16,21 @@ const ToolBar = ({
 }) => {
   const { width } = useWindowDimensions();
 
+  // min size of array
   const MIN_SIZE = 20;
+  // maximum size of array based on screen width
   const MAX_SIZE = 0.2 * width > 20 ? Math.floor(0.2 * width) : 60;
+  //step for range input controlling array size
   const STEP = 10;
 
+  // this keeps track of whether an algorithm is being run. If something
+  // is running, then the user can't run another algorithm, reset the array
+  // or change the array size during this
+  // wasn't able to implement this
   const [isRunning, setIsRunning] = useState(false);
+  // the state of the sorting speed based on the current array size
   const [speeds, setSpeeds] = useState({});
+  // the name of the speed that the user will see
   const [speedLabel, setSpeedLabel] = useState("Normal");
   const sortAlgorithms = [
     mergeSort,
@@ -30,30 +39,40 @@ const ToolBar = ({
     shellSort,
     bitonicSort,
   ];
+  // maps a number to a speed string
   const levelToSpeed = { 0: "Fast", 1: "Normal", 2: "Slow" };
 
+  // the number of levels of speed minus 1
   const N = 2;
 
   React.useEffect(() => {
+    // get the new sorting speeds based on the new size
     const newSpeeds = sizeToSpeeds(size);
+    // set new speeds to be current possible sorting speeds
     setSpeeds(newSpeeds);
+    // set current speed of the sorting algorithm based on new speeds
     setSpeed(newSpeeds[speedLabel.toLowerCase()]);
   }, [size, setSpeeds, setSpeed, sizeToSpeeds, speedLabel]);
 
+  // handles size change from range input
   const handleSizeChange = (e) => {
     const newSize = e.target.value;
     changeSize(parseInt(newSize));
   };
 
   const handleSpeedChange = (e) => {
-    //N - level to get actual level from range b/c lower actually means faster
+    // range input for speed goes from 0 - 2
+    // normally 2 is the fastest, but within the code, the lower numbers
+    // mean a faster speed
+    //N - <level> to get actual level from range
     const level = N - e.target.value;
-    //get the speed label
+    //get the speed label name that user sees
     const label = levelToSpeed[level];
     setSpeedLabel(label);
     //to lowercase b/c the property names are lower case of the label name
     // Ex: Fast -> fast
     const newSpeed = speeds[label.toLowerCase()];
+    // set the new speed that the user moved the range input to
     setSpeed(newSpeed);
   };
 

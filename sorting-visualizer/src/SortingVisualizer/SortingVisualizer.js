@@ -11,33 +11,52 @@ import getBitonicSortAnimations from "./../Sorting/bitonicSort.js";
 const SortingVisualizer = () => {
   const { height } = useWindowDimensions();
 
+  // the height of the container for the array bars in percent
   const CONTAINER_HEIGHT_PERCENT = 100 - 7000 / height;
+
+  // minimum height of a bar in px
   const MIN_HEIGHT = 5;
+  // maximum height of a bar in px based on screen height
   const MAX_HEIGHT = (CONTAINER_HEIGHT_PERCENT / 100) * height - 10;
 
   const AQUA = "aqua";
   const RED = "#cc0000";
   const MAROON = "#800000";
 
+  // array of numbers that user sees as bars
   const [array, setArray] = useState([]);
+  // size of the array
   const [size, setSize] = useState(150);
+  // sorting speed
   const [speed, setSpeed] = useState(6);
+  // the width of a bar on the screen in percent
   const [barWidth, setBarWidth] = useState(0.3466666);
 
+  // reference to the bars that will be animated
   const barRefs = useRef([]);
 
   React.useEffect(() => {
+    // get new array of requested size
     resetArray(size);
+    // new reference to the bars of the array that will be animated
     barRefs.current = new Array(size);
+    // reset the number of comparisons and array accesses to 0
     resetStatistics();
   }, [size]);
 
   const resetStatistics = () => {
+    // hacky and bad way to reset current number of comparisons and
+    // accesses
+
+    // wanted to use state, but since both numbers change while
+    // the array sort is being animated (loop), the set states are
+    // mashed together and the numbers wouldn't update properly
     document.getElementById("comparisons").innerHTML = "Comparisons: 0";
     document.getElementById("array-accesses").innerHTML = "Array accesses: 0";
   };
 
   const sizeToBarWidth = (n) => {
+    // formula for bar width based on array size
     return 55 / n;
   };
 
@@ -78,6 +97,12 @@ const SortingVisualizer = () => {
   };
 
   const setStatistics = (curStats) => {
+    // hacky and bad way to set current number of comparisons and
+    // accesses
+
+    // wanted to use state, but since both numbers change while
+    // the array sort is being animated (loop), the set states are
+    // mashed together and the numbers wouldn't update properly
     const { comparisons, accesses } = curStats;
     document.getElementById(
       "comparisons"
@@ -86,6 +111,18 @@ const SortingVisualizer = () => {
       "array-accesses"
     ).innerHTML = `Array accesses: ${accesses}`;
   };
+
+  // the animations for all the sorting algorithms at each step are
+  // kept in an array that is returned from the actual sort
+  // there is a corresponding array of the number of comparisons/array
+  // accesses at each step
+
+  // Using, the array of animations at each step of the sort, we animate
+  // the array at each step of the sort and similarly for the number of
+  // comparisons/array accesses
+
+  // the animation at index i correspondings the the number of
+  // comparisons/array accesses so far in the sort at index i
 
   const mergeSort = () => {
     const { animations, statistics } = getMergeSortAnimations(array.slice());
