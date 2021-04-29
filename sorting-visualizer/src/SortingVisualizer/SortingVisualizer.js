@@ -19,7 +19,7 @@ const SortingVisualizer = () => {
   // maximum height of a bar in px based on screen height
   const MAX_HEIGHT = (CONTAINER_HEIGHT_PERCENT / 100) * height - 10;
 
-  const AQUA = "aqua";
+  const AQUA = "#00FFFF";
   const RED = "#cc0000";
   const MAROON = "#800000";
 
@@ -37,12 +37,16 @@ const SortingVisualizer = () => {
 
   React.useEffect(() => {
     // get new array of requested size
-    resetArray(size);
+    const newArray = [];
+    for (let i = 0; i < size; i++) {
+      newArray.push(getRandomIntFromRange(MIN_HEIGHT, MAX_HEIGHT));
+    }
+    setArray(newArray);
     // new reference to the bars of the array that will be animated
     barRefs.current = new Array(size);
     // reset the number of comparisons and array accesses to 0
     resetStatistics();
-  }, [size]);
+  }, [size, MIN_HEIGHT, MAX_HEIGHT]);
 
   const resetStatistics = () => {
     // hacky and bad way to reset current number of comparisons and
@@ -55,12 +59,11 @@ const SortingVisualizer = () => {
     document.getElementById("array-accesses").innerHTML = "Array accesses: 0";
   };
 
-  const sizeToBarWidth = (n) => {
-    // formula for bar width based on array size
-    return 55 / n;
-  };
-
   const changeSize = (n) => {
+    const sizeToBarWidth = (n) => {
+      // formula for bar width based on array size
+      return 55 / n;
+    };
     setSize(n);
     resetArray(n);
     //change bar width
@@ -128,6 +131,7 @@ const SortingVisualizer = () => {
     const { animations, statistics } = getMergeSortAnimations(array.slice());
     const arrayBars = barRefs.current;
     for (let i = 0; i < animations.length; i++) {
+      console.log(arrayBars);
       const isColorChange = i % 3 !== 2;
       if (isColorChange) {
         //we are comparing or just  done comparing
