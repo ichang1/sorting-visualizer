@@ -1,0 +1,6 @@
+:root {
+  --bar-bg: #34495e;
+  --bar-height: 50px;
+  --border: 0.05em solid black;
+  --border-radius: 8px;
+}

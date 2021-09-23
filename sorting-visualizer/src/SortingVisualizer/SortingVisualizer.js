@@ -9,7 +9,7 @@ import getShellSortAnimations from "./../Sorting/shellSort.js";
 import getBitonicSortAnimations from "./../Sorting/bitonicSort.js";
 
 const SortingVisualizer = () => {
-  const { height } = useWindowDimensions();
+  const { width, height } = useWindowDimensions();
 
   // the height of the container for the array bars in percent
   const CONTAINER_HEIGHT_PERCENT = 100 - 7000 / height;
@@ -17,7 +17,8 @@ const SortingVisualizer = () => {
   // minimum height of a bar in px
   const MIN_HEIGHT = 5;
   // maximum height of a bar in px based on screen height
-  const MAX_HEIGHT = (CONTAINER_HEIGHT_PERCENT / 100) * height - 10;
+  const MAX_HEIGHT = height - 150;
+  const MIN_WIDTH = 10;
 
   const AQUA = "#00FFFF";
   const RED = "#cc0000";
@@ -131,7 +132,6 @@ const SortingVisualizer = () => {
     const { animations, statistics } = getMergeSortAnimations(array.slice());
     const arrayBars = barRefs.current;
     for (let i = 0; i < animations.length; i++) {
-      console.log(arrayBars);
       const isColorChange = i % 3 !== 2;
       if (isColorChange) {
         //we are comparing or just  done comparing
@@ -142,7 +142,6 @@ const SortingVisualizer = () => {
         setTimeout(() => {
           leftBarStyle.backgroundColor = color;
           rightBarStyle.backgroundColor = color;
-
           setStatistics(statistics[i + 1]);
         }, i * speed);
       } else {
@@ -319,20 +318,23 @@ const SortingVisualizer = () => {
     }
   };
 
+  const sortAlgorithms = [
+    mergeSort,
+    quickSort,
+    heapSort,
+    shellSort,
+    bitonicSort,
+  ];
   return (
     <div>
       <ToolBar
+        sortAlgorithms={sortAlgorithms}
         getArray={resetArray}
-        mergeSort={mergeSort}
-        quickSort={quickSort}
-        heapSort={heapSort}
-        shellSort={shellSort}
-        bitonicSort={bitonicSort}
         size={size}
         changeSize={changeSize}
         setSpeed={setSpeed}
         sizeToSpeeds={sizeToSpeeds}
-      ></ToolBar>
+      />
       <div id="statistics">
         <div id="comparisons">Comparisons: 0</div>
         <div id="array-accesses">Array accesses: 0</div>

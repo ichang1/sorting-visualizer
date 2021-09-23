@@ -1,14 +1,12 @@
 import React, { useState } from "react";
 import "./ToolBar.css";
 import useWindowDimensions from "./../Utils/windowDimensions.js";
+import Dropdown from "./../Dropdown/Dropdown.js";
+import { FaBars } from "react-icons/fa";
 
 const ToolBar = ({
+  sortAlgorithms,
   getArray,
-  mergeSort,
-  quickSort,
-  heapSort,
-  shellSort,
-  bitonicSort,
   size,
   changeSize,
   setSpeed,
@@ -19,7 +17,7 @@ const ToolBar = ({
   // min size of array
   const MIN_SIZE = 20;
   // maximum size of array based on screen width
-  const MAX_SIZE = 0.2 * width > 20 ? Math.floor(0.2 * width) : 60;
+  const MAX_SIZE = Math.floor(0.2 * (width - 10));
   //step for range input controlling array size
   const STEP = 10;
 
@@ -32,13 +30,6 @@ const ToolBar = ({
   const [speeds, setSpeeds] = useState({});
   // the name of the speed that the user will see
   const [speedLabel, setSpeedLabel] = useState("Normal");
-  const sortAlgorithms = [
-    mergeSort,
-    quickSort,
-    heapSort,
-    shellSort,
-    bitonicSort,
-  ];
   // maps a number to a speed string
   const levelToSpeed = { 0: "Fast", 1: "Normal", 2: "Slow" };
 
@@ -78,15 +69,28 @@ const ToolBar = ({
 
   return (
     <nav id="tool-bar">
-      {sortAlgorithms.map((algorithm, idx) => (
-        <button
-          className="sort-button"
-          onClick={!isRunning ? algorithm : null}
-          key={`sort-algorithm-${idx}`}
-        >
-          {algorithm.name}
-        </button>
-      ))}
+      <Dropdown icon={<FaBars className="dropdown-icon" />} right={false}>
+        {sortAlgorithms.map((algorithm, idx) => (
+          <button
+            className="sort-button"
+            onClick={!isRunning ? algorithm : null}
+            key={`sort-algorithm-${idx}`}
+          >
+            {algorithm.name}
+          </button>
+        ))}
+      </Dropdown>
+      <ul className="sorting-buttons">
+        {sortAlgorithms.map((algorithm, idx) => (
+          <button
+            className="sort-button"
+            onClick={!isRunning ? algorithm : null}
+            key={`sort-algorithm-${idx}`}
+          >
+            {algorithm.name}
+          </button>
+        ))}
+      </ul>
       <div id="get-array-container">
         <button
           id="get-array"
@@ -101,35 +105,66 @@ const ToolBar = ({
           New Array
         </button>
       </div>
-      <div id="size-range-container">
-        <div id="size-range-title">Size</div>
-        <input
-          id="change-size"
-          type="range"
-          min={`${MIN_SIZE}`}
-          max={`${MAX_SIZE}`}
-          step={`${STEP}`}
-          defaultValue="150"
-          disabled={isRunning ? "disabled" : null}
-          onChange={handleSizeChange}
-        />
-        <div id="array-size">{size}</div>
-      </div>
-
-      <div id="speed-range-container">
-        <div id="speed-range-title">Speed</div>
-        <input
-          id="change-speed"
-          type="range"
-          min="0"
-          max="2"
-          step="1"
-          defaultValue="1"
-          disabled={isRunning ? "disabled" : null}
-          onChange={handleSpeedChange}
-        />
-        <div id="speed-label">{speedLabel}</div>
-      </div>
+      <ul className="range-container">
+        <div id="size-range-container">
+          <div id="size-range-title">Size</div>
+          <input
+            id="change-size"
+            type="range"
+            min={`${MIN_SIZE}`}
+            max={`${MAX_SIZE}`}
+            step={`${STEP}`}
+            defaultValue="150"
+            disabled={isRunning ? "disabled" : null}
+            onChange={handleSizeChange}
+          />
+          <div id="array-size">{size}</div>
+        </div>
+        <div id="speed-range-container">
+          <div id="speed-range-title">Speed</div>
+          <input
+            id="change-speed"
+            type="range"
+            min="0"
+            max="2"
+            step="1"
+            defaultValue="1"
+            disabled={isRunning ? "disabled" : null}
+            onChange={handleSpeedChange}
+          />
+          <div id="speed-label">{speedLabel}</div>
+        </div>
+      </ul>
+      <Dropdown icon={<FaBars className="dropdown-icon" />} right={true}>
+        <div id="size-range-container">
+          <div id="size-range-title">Size</div>
+          <input
+            id="change-size"
+            type="range"
+            min={`${MIN_SIZE}`}
+            max={`${MAX_SIZE}`}
+            step={`${STEP}`}
+            defaultValue="150"
+            disabled={isRunning ? "disabled" : null}
+            onChange={handleSizeChange}
+          />
+          <div id="array-size">{size}</div>
+        </div>
+        <div id="speed-range-container">
+          <div id="speed-range-title">Speed</div>
+          <input
+            id="change-speed"
+            type="range"
+            min="0"
+            max="2"
+            step="1"
+            defaultValue="1"
+            disabled={isRunning ? "disabled" : null}
+            onChange={handleSpeedChange}
+          />
+          <div id="speed-label">{speedLabel}</div>
+        </div>
+      </Dropdown>
     </nav>
   );
 };
