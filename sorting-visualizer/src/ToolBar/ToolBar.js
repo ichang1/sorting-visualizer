@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./ToolBar.css";
 import useWindowDimensions from "./../Utils/windowDimensions.js";
 import Dropdown from "./../Dropdown/Dropdown.js";
@@ -21,6 +21,8 @@ const ToolBar = ({
   //step for range input controlling array size
   const STEP = 10;
 
+  const [maxSize, setMaxSize] = useState(Math.floor(0.2 * (width - 10)));
+
   // this keeps track of whether an algorithm is being run. If something
   // is running, then the user can't run another algorithm, reset the array
   // or change the array size during this
@@ -28,6 +30,7 @@ const ToolBar = ({
   const [isRunning, setIsRunning] = useState(false);
   // the state of the sorting speed based on the current array size
   const [speeds, setSpeeds] = useState({});
+
   // the name of the speed that the user will see
   const [speedLabel, setSpeedLabel] = useState("Normal");
   // maps a number to a speed string
@@ -36,7 +39,7 @@ const ToolBar = ({
   // the number of levels of speed minus 1
   const N = 2;
 
-  React.useEffect(() => {
+  useEffect(() => {
     // get the new sorting speeds based on the new size
     const newSpeeds = sizeToSpeeds(size);
     // set new speeds to be current possible sorting speeds
@@ -44,6 +47,18 @@ const ToolBar = ({
     // set current speed of the sorting algorithm based on new speeds
     setSpeed(newSpeeds[speedLabel.toLowerCase()]);
   }, [size, setSpeeds, setSpeed, sizeToSpeeds, speedLabel]);
+
+  // const maxSize = useCallback(() => Math.floor(0.2 * (width - 10)), [width]);
+
+  // 0.8 = (bar_size * n)/width -> n = (0.8 * width)/bar_size
+  useEffect(() => {
+    let newMaxSize = Math.floor((0.8 * width) / 4.5);
+    newMaxSize -= newMaxSize % 10;
+    if (size > newMaxSize) {
+      changeSize(newMaxSize);
+    }
+    setMaxSize(newMaxSize);
+  }, [width]);
 
   // handles size change from range input
   const handleSizeChange = (e) => {
@@ -112,9 +127,10 @@ const ToolBar = ({
             id="change-size"
             type="range"
             min={`${MIN_SIZE}`}
-            max={`${MAX_SIZE}`}
+            max={`${maxSize}`}
             step={`${STEP}`}
-            defaultValue="150"
+            value={size}
+            // defaultValue="150"
             disabled={isRunning ? "disabled" : null}
             onChange={handleSizeChange}
           />
@@ -142,9 +158,10 @@ const ToolBar = ({
             id="change-size"
             type="range"
             min={`${MIN_SIZE}`}
-            max={`${MAX_SIZE}`}
+            max={`${maxSize}`}
             step={`${STEP}`}
-            defaultValue="150"
+            value={size}
+            // defaultValue="150"
             disabled={isRunning ? "disabled" : null}
             onChange={handleSizeChange}
           />

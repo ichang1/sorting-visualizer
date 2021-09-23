@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "./SortingVisualizer.css";
 import ToolBar from "./../ToolBar/ToolBar.js";
 import useWindowDimensions from "./../Utils/windowDimensions.js";
@@ -9,16 +9,14 @@ import getShellSortAnimations from "./../Sorting/shellSort.js";
 import getBitonicSortAnimations from "./../Sorting/bitonicSort.js";
 
 const SortingVisualizer = () => {
-  const { width, height } = useWindowDimensions();
-
+  const { height } = useWindowDimensions();
   // the height of the container for the array bars in percent
   const CONTAINER_HEIGHT_PERCENT = 100 - 7000 / height;
 
   // minimum height of a bar in px
   const MIN_HEIGHT = 5;
   // maximum height of a bar in px based on screen height
-  const MAX_HEIGHT = height - 150;
-  const MIN_WIDTH = 10;
+  const MAX_HEIGHT = (CONTAINER_HEIGHT_PERCENT / 100) * height - 50;
 
   const AQUA = "#00FFFF";
   const RED = "#cc0000";
