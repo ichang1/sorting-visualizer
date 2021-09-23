@@ -16,8 +16,6 @@ const ToolBar = ({
 
   // min size of array
   const MIN_SIZE = 20;
-  // maximum size of array based on screen width
-  const MAX_SIZE = Math.floor(0.2 * (width - 10));
   //step for range input controlling array size
   const STEP = 10;
 
@@ -85,24 +83,24 @@ const ToolBar = ({
   return (
     <nav id="tool-bar">
       <Dropdown icon={<FaBars className="dropdown-icon" />} right={false}>
-        {sortAlgorithms.map((algorithm, idx) => (
+        {sortAlgorithms.map(({ func: algorithm, name }, idx) => (
           <button
             className="sort-button"
             onClick={!isRunning ? algorithm : null}
             key={`sort-algorithm-${idx}`}
           >
-            {algorithm.name}
+            {name}
           </button>
         ))}
       </Dropdown>
       <ul className="sorting-buttons">
-        {sortAlgorithms.map((algorithm, idx) => (
+        {sortAlgorithms.map(({ func: algorithm, name }, idx) => (
           <button
             className="sort-button"
             onClick={!isRunning ? algorithm : null}
             key={`sort-algorithm-${idx}`}
           >
-            {algorithm.name}
+            {name}
           </button>
         ))}
       </ul>
@@ -130,7 +128,6 @@ const ToolBar = ({
             max={`${maxSize}`}
             step={`${STEP}`}
             value={size}
-            // defaultValue="150"
             disabled={isRunning ? "disabled" : null}
             onChange={handleSizeChange}
           />
@@ -161,7 +158,6 @@ const ToolBar = ({
             max={`${maxSize}`}
             step={`${STEP}`}
             value={size}
-            // defaultValue="150"
             disabled={isRunning ? "disabled" : null}
             onChange={handleSizeChange}
           />

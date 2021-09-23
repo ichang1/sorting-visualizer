@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import "./SortingVisualizer.css";
 import ToolBar from "./../ToolBar/ToolBar.js";
 import useWindowDimensions from "./../Utils/windowDimensions.js";
@@ -317,11 +317,11 @@ const SortingVisualizer = () => {
   };
 
   const sortAlgorithms = [
-    mergeSort,
-    quickSort,
-    heapSort,
-    shellSort,
-    bitonicSort,
+    {func:mergeSort, name:'mergesort'},
+    {func:quickSort, name:'quicksort'},
+    {func:heapSort, name:"heapsort"},
+    {func:shellSort, name:"shellsort"},
+    {func:bitonicSort, name:"bitonicsort"},
   ];
   return (
     <div>
